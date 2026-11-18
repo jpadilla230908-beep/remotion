@@ -4,7 +4,7 @@ Reels verticales (1080×1920) de **historias de terror animadas en 2D** con pers
 
 | Paso | Herramienta | Qué hace |
 |------|-------------|----------|
-| Voces | **Chatterbox Multilingual** (narrador) y **Kokoro** (personajes) + ffmpeg | Narrador humano y grave con dramatismo; niña y fantasma con efectos |
+| Voces | **Qwen3-TTS** (Alibaba, Apache 2.0) + ffmpeg | Narrador, Lucía y fantasma clonados de voces diseñadas y elegidas en un casting; Whisper revisa cada frase |
 | Subtítulos | **Whisper** (repo `whisper`, modelo `small`) | Tiempos palabra a palabra; el texto sale del guion |
 | SFX | `scripts/sfx.py` | Drone, golpes, crujido, latido y golpe de susto sintetizados |
 | Animación | **Remotion** | Sets SVG, personajes con parpadeo, miedo y lip-sync, cámara, grano, susto final |
@@ -15,10 +15,11 @@ Reels verticales (1080×1920) de **historias de terror animadas en 2D** con pers
 
 Cada voz de `story.voices` elige motor con `engine`:
 
-- `"chatterbox"`: Chatterbox Multilingual (MIT). Es natural, imita el timbre de `ref` (unos 10 s de audio) y admite `exaggeration` (0.5 = neutro, 0.7 = dramático), `cfg` (más bajo = más pausado) y `temperature`. Sin GPU tarda unos 30 s por frase.
-- `"kokoro"`: rápido, pero más robótico. Usa `voice` (`em_alex`, `em_santa`, `ef_dora`) y `speed`.
+- `"qwen"` (el que se usa ahora): Qwen3-TTS Base clona la voz de `ref`, una toma de `voices/` cuyo texto está en `voices/refs.json`. Es el más natural de los que probamos. Sin GPU tarda alrededor de 1 minuto por frase.
+- `"chatterbox"`: Chatterbox Multilingual (MIT). Admite `exaggeration`, `cfg` e `intensity` por escena.
+- `"kokoro"`: muy rápido, pero suena robótico.
 
-`voices/narrador.wav` es la voz real de un lector humano de LibriVox (CC BY 4.0, ver `voices/CREDITS.md`). Una referencia humana es la clave para que la voz no suene a IA. `voices/nina.wav` sigue siendo sintética.
+Whisper comprueba cada frase de Qwen y Chatterbox, y si no coincide con el guion la vuelve a generar con otra semilla (`"qa": false` lo desactiva). Para crear voces nuevas: diseña una toma con Qwen3-TTS VoiceDesign describiéndola en texto, guárdala en `voices/` y añade su texto a `refs.json`. Más detalles en `voices/CREDITS.md`.
 
 ## Uso
 
@@ -27,7 +28,7 @@ Cada voz de `story.voices` elige motor con `engine`:
 npm run studio                           # previsualizar en Remotion Studio
 ```
 
-Requisitos: dos entornos virtuales de Python. `/home/user/venv` lleva Whisper (`pip install -e ../../whisper`). `/home/user/venv-cb` lleva `torch==2.6.0 torchaudio==2.6.0` desde el índice de PyTorch para CPU, más `chatterbox-tts kokoro-onnx soundfile`. Además necesitas los modelos en `$MODELS_DIR` (por defecto `/home/user/models`): `kokoro-v1.0.onnx` y `voices-v1.0.bin`, que se descargan de las releases de GitHub de `thewh1teagle/kokoro-onnx`.
+Requisitos: `/home/user/venv` con Whisper (`pip install -e ../../whisper`) para los subtítulos, y `/home/user/venv-qwen` para las voces: `torch torchaudio` desde el índice de PyTorch para CPU, más `qwen-tts kokoro-onnx soundfile num2words` y `-e ../../whisper`. También hace falta el programa `sox` (`apt-get install sox`). Chatterbox es opcional y va en su propio entorno (`torch==2.6.0`), porque necesita otra versión de transformers. Además necesitas los modelos en `$MODELS_DIR` (por defecto `/home/user/models`): `kokoro-v1.0.onnx` y `voices-v1.0.bin`, que se descargan de las releases de GitHub de `thewh1teagle/kokoro-onnx`.
 
 ## Escribir una historia nueva
 

@@ -1,7 +1,11 @@
-# Créditos de las voces de referencia
+# Voces de referencia
 
-- `narrador.wav`: fragmento de lectura humana del hablante 2305 (grabación `2305_1378_000172`), elegido por ser el lector más expresivo, del dataset
-  [Multilingual LibriSpeech](https://huggingface.co/datasets/facebook/multilingual_librispeech) (español),
-  derivado de audiolibros de LibriVox. Licencia CC BY 4.0.
-  Chatterbox solo lo usa como referencia de timbre; no aparece en los reels.
-- `nina.wav`: referencia sintética generada con Kokoro (`ef_dora`) y subida de tono.
+Las tres voces se diseñaron con **Qwen3-TTS VoiceDesign 1.7B** (Alibaba, licencia Apache 2.0) a partir de una
+descripción escrita, y se eligieron en el casting. El pipeline las clona con **Qwen3-TTS Base 1.7B** para que
+cada personaje mantenga la misma voz en todas las frases. El texto de cada toma está en `refs.json`.
+
+| Archivo | Personaje | Descripción usada |
+|---|---|---|
+| `narrador.wav` | Narrador (casting N3) | Locutor maduro de un programa de terror nocturno: barítono profundo, cálido y seguro, dicción clara, crea suspenso. Acento latinoamericano neutro. |
+| `nina.wav` | Lucía (casting G5) | Niña real de 8 años grabada en su cuarto de noche: voz infantil natural, asustada e insegura, algo temblorosa. Acento latinoamericano neutro. |
+| `fantasma.wav` | Fantasma | Niña fantasma de unos 10 años: susurro hueco y aireado, calma fría e inquietante, algo cantarina. |

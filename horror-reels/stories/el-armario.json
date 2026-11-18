@@ -3,26 +3,19 @@
   "title": "NO ABRAS\nEL ARMARIO",
   "voices": {
     "narrador": {
-      "engine": "chatterbox",
+      "engine": "qwen",
       "ref": "voices/narrador.wav",
-      "exaggeration": 0.5,
-      "cfg": 0.5,
-      "temperature": 0.75,
-      "fx": "cuentacuentos",
-      "beats": true
+      "fx": "sala"
     },
     "lucia": {
-      "engine": "chatterbox",
+      "engine": "qwen",
       "ref": "voices/nina.wav",
-      "exaggeration": 1.2,
-      "cfg": 0.4,
-      "fx": "nina_miedo",
-      "qa": false
+      "fx": "sala"
     },
     "fantasma": {
-      "voice": "ef_dora",
-      "speed": 0.8,
-      "fx": "fantasma"
+      "engine": "qwen",
+      "ref": "voices/fantasma.wav",
+      "fx": "fantasma_sala"
     }
   },
   "scenes": [
@@ -39,8 +32,7 @@
       },
       "closet": 0,
       "showTitle": true,
-      "pauseAfter": 0.3,
-      "intensity": 0.2
+      "pauseAfter": 0.3
     },
     {
       "id": "s2",
@@ -56,14 +48,13 @@
       "closet": 0,
       "sfx": "knock",
       "clock": "3:00",
-      "pauseAfter": 0.4,
-      "intensity": 0.5
+      "pauseAfter": 0.4
     },
     {
       "id": "s3",
       "set": "bedroom",
       "speaker": "lucia",
-      "text": "¿Ma... mamá? ¿Eres... tú?",
+      "text": "¿Mamá...? ¿Eres tú? ¿Estás ahí?",
       "camera": "closeKid",
       "kid": {
         "x": 760,
@@ -79,8 +70,7 @@
       "speaker": "narrador",
       "text": "Pero su madre dormía al otro lado de la casa... con la puerta cerrada con llave.",
       "camera": "dolly",
-      "pauseAfter": 0.3,
-      "intensity": 0.4
+      "pauseAfter": 0.3
     },
     {
       "id": "s5",
@@ -98,8 +88,7 @@
         "where": "closet"
       },
       "sfx": "creak",
-      "pauseAfter": 0.5,
-      "intensity": 0.6
+      "pauseAfter": 0.5
     },
     {
       "id": "s6",
@@ -124,8 +113,7 @@
         "look": 0
       },
       "closet": 0.35,
-      "pauseAfter": 0.3,
-      "intensity": 0.5
+      "pauseAfter": 0.3
     },
     {
       "id": "s8",
@@ -140,8 +128,7 @@
       },
       "closet": 1,
       "pauseAfter": 1.0,
-      "sfx": "heartbeat",
-      "intensity": 0.8
+      "sfx": "heartbeat"
     },
     {
       "id": "s9",
@@ -153,8 +140,7 @@
         "where": "underbed"
       },
       "sfx": "sting",
-      "pauseAfter": 0.8,
-      "intensity": 1.0
+      "pauseAfter": 0.8
     },
     {
       "id": "s10",
@@ -162,8 +148,7 @@
       "speaker": "narrador",
       "text": "Y tú... ¿ya revisaste debajo de la tuya?",
       "camera": "none",
-      "pauseAfter": 1.5,
-      "intensity": 0.7
+      "pauseAfter": 1.5
     }
   ]
 }
