@@ -7,15 +7,17 @@
       "ref": "voices/narrador.wav",
       "exaggeration": 0.5,
       "cfg": 0.5,
-      "temperature": 0.7,
-      "fx": "cuentacuentos"
+      "temperature": 0.75,
+      "fx": "cuentacuentos",
+      "beats": true
     },
     "lucia": {
       "engine": "chatterbox",
       "ref": "voices/nina.wav",
       "exaggeration": 1.2,
       "cfg": 0.4,
-      "fx": "nina_miedo"
+      "fx": "nina_miedo",
+      "qa": false
     },
     "fantasma": {
       "voice": "ef_dora",
@@ -28,7 +30,7 @@
       "id": "s1",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Lucía tenía ocho años cuando empezó a oír golpes dentro de su armario.",
+      "text": "Lucía tenía ocho años... cuando empezó a oír golpes. Dentro de su armario.",
       "camera": "zoomIn",
       "kid": {
         "x": 760,
@@ -37,13 +39,14 @@
       },
       "closet": 0,
       "showTitle": true,
-      "pauseAfter": 0.3
+      "pauseAfter": 0.3,
+      "intensity": 0.2
     },
     {
       "id": "s2",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Toc. Toc. Toc. Siempre a las tres de la mañana.",
+      "text": "Toc... toc... toc. Siempre... a las tres de la mañana.",
       "camera": "shake",
       "kid": {
         "x": 760,
@@ -53,7 +56,8 @@
       "closet": 0,
       "sfx": "knock",
       "clock": "3:00",
-      "pauseAfter": 0.4
+      "pauseAfter": 0.4,
+      "intensity": 0.5
     },
     {
       "id": "s3",
@@ -73,15 +77,16 @@
       "id": "s4",
       "set": "hallway",
       "speaker": "narrador",
-      "text": "Pero su madre dormía al otro lado de la casa, con la puerta cerrada con llave.",
+      "text": "Pero su madre dormía al otro lado de la casa... con la puerta cerrada con llave.",
       "camera": "dolly",
-      "pauseAfter": 0.3
+      "pauseAfter": 0.3,
+      "intensity": 0.4
     },
     {
       "id": "s5",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Una noche, la puerta del armario se abrió sola. Solo un poco.",
+      "text": "Una noche... la puerta del armario se abrió sola. Solo... un poco.",
       "camera": "panCloset",
       "kid": {
         "x": 760,
@@ -93,7 +98,8 @@
         "where": "closet"
       },
       "sfx": "creak",
-      "pauseAfter": 0.5
+      "pauseAfter": 0.5,
+      "intensity": 0.6
     },
     {
       "id": "s6",
@@ -110,7 +116,7 @@
       "id": "s7",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Lucía no contestó. Se tapó con la manta y contó hasta cien.",
+      "text": "Lucía no contestó. Se tapó con la manta... y empezó a contar, muy despacio, hasta cien.",
       "camera": "zoomIn",
       "kid": {
         "x": 760,
@@ -118,7 +124,8 @@
         "look": 0
       },
       "closet": 0.35,
-      "pauseAfter": 0.3
+      "pauseAfter": 0.3,
+      "intensity": 0.5
     },
     {
       "id": "s7b",
@@ -139,7 +146,7 @@
       "id": "s8",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Cuando llegó a cien, la voz ya no venía del armario.",
+      "text": "Cuando llegó a cien... la voz ya no venía del armario.",
       "camera": "slowZoomIn",
       "kid": {
         "x": 760,
@@ -148,19 +155,21 @@
       },
       "closet": 1,
       "pauseAfter": 1.0,
-      "sfx": "creak"
+      "sfx": "creak",
+      "intensity": 0.8
     },
     {
       "id": "s9",
       "set": "underbed",
       "speaker": "narrador",
-      "text": "Venía de debajo de su cama.",
+      "text": "Venía... de debajo de su cama.",
       "camera": "jumpscare",
       "ghost": {
         "where": "underbed"
       },
       "sfx": "sting",
-      "pauseAfter": 0.8
+      "pauseAfter": 0.8,
+      "intensity": 1.0
     },
     {
       "id": "s10",
@@ -168,7 +177,8 @@
       "speaker": "narrador",
       "text": "Y tú... ¿ya revisaste debajo de la tuya?",
       "camera": "none",
-      "pauseAfter": 1.5
+      "pauseAfter": 1.5,
+      "intensity": 0.7
     }
   ]
 }

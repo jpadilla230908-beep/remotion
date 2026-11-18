@@ -15,6 +15,7 @@ Salida en public/reels/<id>/:
   - story.json           copia de la historia para Remotion
 """
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -61,8 +62,9 @@ def apply_fx(samples: np.ndarray, fx: str, sr: int = SR) -> np.ndarray:
 _engines = {}
 
 
-def synth(text: str, v: dict) -> tuple:
-    """Devuelve (muestras float32, sample rate) según el motor de la voz."""
+def synth(text: str, v: dict, intensity: float = 0.0) -> tuple:
+    """Devuelve (muestras float32, sample rate) según el motor de la voz.
+    `intensity` (0..1, por escena) sube el dramatismo y hace la lectura más pausada."""
     engine = v.get("engine", "kokoro")
     if engine == "kokoro":
         if "kokoro" not in _engines:
@@ -84,12 +86,73 @@ def synth(text: str, v: dict) -> tuple:
             text,
             language_id="es",
             audio_prompt_path=os.path.join(ROOT, ref) if ref else None,
-            exaggeration=v.get("exaggeration", 0.5),
-            cfg_weight=v.get("cfg", 0.5),
+            exaggeration=v.get("exaggeration", 0.5) + 0.45 * intensity,
+            cfg_weight=max(0.25, v.get("cfg", 0.5) - 0.2 * intensity),
             temperature=v.get("temperature", 0.8),
         )
         return wav.squeeze(0).cpu().numpy().astype(np.float32), model.sr
     raise ValueError(f"Motor de voz desconocido: {engine}")
+
+
+def _norm(t: str) -> list:
+    from num2words import num2words
+
+    t = re.sub(r"\d+", lambda m: " " + num2words(int(m.group()), lang="es") + " ", t.lower())
+    return re.sub(r"[^\wáéíóúñü ]", " ", t).split()
+
+
+def checked(text: str, v: dict, intensity: float, tries: int = 3) -> tuple:
+    """Genera con Chatterbox y comprueba con Whisper que dice el texto.
+    Si no coincide, reintenta con otra semilla y se queda la mejor toma."""
+    if v.get("engine") != "chatterbox" or not v.get("qa", True) or os.environ.get("VOICE_QA", "1") == "0":
+        return synth(text, v, intensity)
+    import difflib
+
+    import torch
+    import whisper
+
+    if "whisper" not in _engines:
+        _engines["whisper"] = whisper.load_model("small", download_root=os.path.join(MODELS, "whisper"))
+    best = None
+    for k in range(tries):
+        torch.manual_seed(int(os.environ.get("TTS_SEED", "7")) + k)
+        samples, sr = synth(text, v, intensity)
+        audio16 = whisper.audio.resample(torch.from_numpy(samples), sr, 16000).numpy() if hasattr(whisper.audio, "resample") else None
+        if audio16 is None:
+            import librosa
+
+            audio16 = librosa.resample(samples, orig_sr=sr, target_sr=16000)
+        heard = _engines["whisper"].transcribe(audio16.astype(np.float32), language="es", fp16=False)["text"]
+        score = difflib.SequenceMatcher(a=_norm(text), b=_norm(heard)).ratio()
+        if best is None or score > best[0]:
+            best = (score, samples, sr)
+        print(f"      toma {k + 1}: {score:.2f}  {heard.strip()}")
+        if score >= 0.9:
+            break
+    return best[1], best[2]
+
+
+def speak(text: str, v: dict, intensity: float, beat_pause: float) -> tuple:
+    """Parte la frase en "golpes" por los puntos suspensivos y mete silencios
+    reales entre ellos, como un cuentacuentos."""
+    beats = [b.strip() for b in re.split(r"(?<=\.\.\.)\s+", text) if b.strip()] if v.get("beats") else [text]
+    # Chatterbox se inventa cosas con fragmentos muy cortos: los uno al siguiente
+    merged = []
+    for b in beats:
+        if merged and len(merged[-1].split()) < 3:
+            merged[-1] += " " + b
+        else:
+            merged.append(b)
+    if len(merged) > 1 and len(merged[-1].split()) < 3:
+        tail = merged.pop()
+        merged[-1] += " " + tail
+    out, sr = [], SR
+    for i, b in enumerate(merged):
+        samples, sr = checked(b, v, intensity)
+        out.append(samples)
+        if i < len(merged) - 1:
+            out.append(np.zeros(int(beat_pause * sr), dtype=np.float32))
+    return np.concatenate(out), sr
 
 
 def main(story_path: str) -> None:
@@ -102,7 +165,7 @@ def main(story_path: str) -> None:
     timeline = []
     for scene in story["scenes"]:
         v = story["voices"][scene["speaker"]]
-        samples, sr = synth(scene["text"], v)
+        samples, sr = speak(scene["text"], v, float(scene.get("intensity", 0)), float(scene.get("beatPause", 0.45)))
         samples = apply_fx(samples, v.get("fx", "seco"), sr)
         peak = float(np.max(np.abs(samples))) or 1.0
         samples = samples / peak * 0.9
