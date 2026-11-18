@@ -33,7 +33,11 @@ LEAD_IN = 0.5  # silencio inicial antes de la primera frase
 FX = {
     "narrador": f"asetrate={SR}*0.93,aresample={SR},atempo=1.075,"
     "aecho=0.8:0.5:70:0.18,bass=g=4,volume=1.2",
+    "cuentacuentos": "aecho=0.8:0.4:60:0.14,bass=g=2,volume=1.1",
     "nina": f"asetrate={SR}*1.1,aresample={SR},atempo=0.91,aecho=0.8:0.4:50:0.12",
+    # niña asustada: más aguda y con la voz temblorosa
+    "nina_miedo": f"asetrate={SR}*1.1,aresample={SR},atempo=0.91,tremolo=f=8:d=0.3,"
+    "vibrato=f=6:d=0.15,aecho=0.8:0.4:45:0.12,volume=1.2",
     "fantasma": f"asetrate={SR}*0.8,aresample={SR},atempo=1.1,"
     "aecho=0.8:0.75:110|260:0.5|0.3,tremolo=f=7:d=0.35,highpass=f=120,volume=1.6",
     "seco": "anull",

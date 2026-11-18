@@ -4,16 +4,17 @@
   "voices": {
     "narrador": {
       "engine": "chatterbox",
-      "ref": "voices/narrador_grave.wav",
-      "exaggeration": 0.7,
-      "cfg": 0.3,
-      "temperature": 0.8,
-      "fx": "narrador"
+      "ref": "voices/narrador.wav",
+      "exaggeration": 0.6,
+      "cfg": 0.4,
+      "fx": "cuentacuentos"
     },
     "lucia": {
-      "voice": "ef_dora",
-      "speed": 1.0,
-      "fx": "nina"
+      "engine": "chatterbox",
+      "ref": "voices/nina.wav",
+      "exaggeration": 1.2,
+      "cfg": 0.4,
+      "fx": "nina_miedo"
     },
     "fantasma": {
       "voice": "ef_dora",
@@ -57,7 +58,7 @@
       "id": "s3",
       "set": "bedroom",
       "speaker": "lucia",
-      "text": "¿Mamá? ¿Eres tú?",
+      "text": "¿Ma... mamá? ¿Eres... tú?",
       "camera": "closeKid",
       "kid": {
         "x": 760,
@@ -65,7 +66,7 @@
         "look": -1
       },
       "closet": 0,
-      "pauseAfter": 0.6
+      "pauseAfter": 0.8
     },
     {
       "id": "s4",
@@ -119,6 +120,21 @@
       "pauseAfter": 0.3
     },
     {
+      "id": "s7b",
+      "set": "bedroom",
+      "speaker": "lucia",
+      "text": "Noventa y ocho... noventa y nueve... cien.",
+      "camera": "slowZoomIn",
+      "kid": {
+        "x": 760,
+        "mood": "hiding",
+        "look": 0
+      },
+      "closet": 0.35,
+      "sfx": "heartbeat",
+      "pauseAfter": 0.6
+    },
+    {
       "id": "s8",
       "set": "bedroom",
       "speaker": "narrador",
@@ -131,7 +147,7 @@
       },
       "closet": 1,
       "pauseAfter": 1.0,
-      "sfx": "heartbeat"
+      "sfx": "creak"
     },
     {
       "id": "s9",

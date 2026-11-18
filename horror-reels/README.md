@@ -18,7 +18,7 @@ Cada voz de `story.voices` elige motor con `engine`:
 - `"chatterbox"`: Chatterbox Multilingual (MIT). Es natural, imita el timbre de `ref` (unos 10 s de audio) y admite `exaggeration` (0.5 = neutro, 0.7 = dramático), `cfg` (más bajo = más pausado) y `temperature`. Sin GPU tarda unos 30 s por frase.
 - `"kokoro"`: rápido, pero más robótico. Usa `voice` (`em_alex`, `em_santa`, `ef_dora`) y `speed`.
 
-`voices/narrador_grave.wav` es una referencia grave sintética que se generó con Kokoro y se bajó de tono. Si la sustituyes por una grabación real (tuya o con licencia), el narrador sonará todavía más humano.
+`voices/narrador.wav` (cuentacuentos) y `voices/nina.wav` (niña) son referencias sintéticas que se generaron con Kokoro y se ajustaron de tono. Si la sustituyes por una grabación real (tuya o con licencia), el narrador sonará todavía más humano.
 
 ## Uso
 
