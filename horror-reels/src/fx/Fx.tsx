@@ -39,10 +39,14 @@ export const cameraTransform = (move: CameraMove, f: number, dur: number, hitF: 
 			return zoomAt(1 + 0.6 * ease(p), 540, 1000);
 		case 'jumpscare': {
 			if (f < hitF) {
-				return zoomAt(1 + 0.15 * (f / Math.max(1, hitF)), 560, 1000);
+				// acercamiento lento hacia los ojos, cada vez más
+				const k = f / Math.max(1, hitF);
+				return zoomAt(1 + 0.35 * k * k, 560, 1000);
 			}
-			const decay = Math.max(0, 1 - (f - hitF) / 25);
-			return `${jitter(70 * decay + 6, 'js')} ${zoomAt(1.25, 540, 1000)}`;
+			// golpe: sacudida violenta que se va calmando, sin quedarse quieta
+			const decay = Math.max(0, 1 - (f - hitF) / 30);
+			const punch = interpolate(f - hitF, [0, 2, 8], [1.6, 1.35, 1.3], {extrapolateRight: 'clamp'});
+			return `${jitter(110 * decay + 10, 'js')} rotate(${(random(`jr${f}`) - 0.5) * 6 * decay}deg) ${zoomAt(punch, 540, 1000)}`;
 		}
 		default:
 			return 'none';
@@ -74,7 +78,7 @@ export const Overlay: React.FC<{frame: number; sceneF: number; cut: boolean; fla
 			{flash > 0 && (
 				<>
 					<AbsoluteFill style={{background: '#fff', opacity: flash > 0.7 ? 0.9 : 0}} />
-					<AbsoluteFill style={{background: '#b0001a', mixBlendMode: 'multiply', opacity: flash * 0.55}} />
+					<AbsoluteFill style={{background: '#b0001a', mixBlendMode: 'multiply', opacity: flash * 0.4}} />
 				</>
 			)}
 		</>

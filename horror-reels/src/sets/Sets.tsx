@@ -245,9 +245,13 @@ export const Closet: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 /* ---------------- DEBAJO DE LA CAMA ---------------- */
 
 export const UnderBed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
-	const hit = ctx.speechEndF;
-	const reveal = interpolate(ctx.f, [hit - 3, hit + 2], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-	const scale = interpolate(ctx.f, [hit - 3, hit + 3], [0.55, 1.6], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const hit = ctx.hitF;
+	// en 2 frames pasa de invisible a encima de la cámara
+	const reveal = interpolate(ctx.f, [hit - 1, hit], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const scale = interpolate(ctx.f, [hit - 1, hit + 2, hit + 40], [0.5, 2.1, 2.35], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	// antes del golpe los ojos se acercan despacio y parpadean una vez
+	const eyesIn = interpolate(ctx.f, [0, hit], [0.7, 1.2], {extrapolateRight: 'clamp'});
+	const blink = Math.abs(ctx.f - (hit - 18)) < 2 ? 0 : 1;
 	return (
 		<g>
 			<rect width={W} height={H} fill="#07060b" />
@@ -263,12 +267,12 @@ export const UnderBed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			<circle cx={860} cy={1390} r={45} fill="#8a6a4f" />
 			{/* antes del susto: solo ojos en la oscuridad */}
 			{reveal < 1 && (
-				<g transform="translate(560, 1000)" opacity={1 - reveal}>
+				<g transform={`translate(560, 1000) scale(${eyesIn})`} opacity={(1 - reveal) * blink}>
 					<GhostEyes frame={ctx.f} size={0.9} gap={110} />
 				</g>
 			)}
 			{reveal > 0 && (
-				<g transform={`translate(540, 1000) scale(${scale}) rotate(-8)`} opacity={reveal}>
+				<g transform={`translate(540, 980) scale(${scale}) rotate(${-8 + Math.sin(ctx.f * 2.3) * 3})`} opacity={reveal}>
 					<Ghost frame={ctx.f} mouth={0} scream={reveal} />
 				</g>
 			)}

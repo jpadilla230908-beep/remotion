@@ -41,13 +41,39 @@ export const Ghost: React.FC<{frame: number; mouth: number; scream?: number}> = 
 			{/* cara */}
 			<ellipse cx={0} cy={10} rx={118} ry={140} fill="#c9d3d6" />
 			<ellipse cx={0} cy={10} rx={118} ry={140} fill="url(#ghostShade)" />
+			{/* grietas oscuras que aparecen al gritar */}
+			{scream > 0.3 && (
+				<path
+					d="M -60 -60 l -18 40 l 10 30 l -22 45 M 55 -70 l 14 35 l -12 28 l 20 50 M -20 120 l -10 40 M 25 125 l 12 38"
+					stroke="#2a0d14"
+					strokeWidth={4}
+					fill="none"
+					opacity={scream * 0.8}
+				/>
+			)}
 			<g transform="translate(0,-5)">
-				<GhostEyes frame={frame} size={1.25 + scream * 0.6} gap={84} />
+				{scream > 0.5 ? (
+					// ojos en blanco, encendidos, con una pupila diminuta
+					[-46, 46].map((x) => (
+						<g key={x} transform={`translate(${x},0)`}>
+							<ellipse rx={36} ry={30} fill="#050507" />
+							<ellipse rx={26} ry={22} fill="#f6f8ff" filter="url(#glow)" />
+							<circle r={4} fill="#050507" />
+						</g>
+					))
+				) : (
+					<GhostEyes frame={frame} size={1.25 + scream * 0.6} gap={84} />
+				)}
 			</g>
 			{/* ojeras */}
 			<path d="M -75 25 Q -42 40 -10 25 M 10 25 Q 42 40 75 25" stroke="#6b5f75" strokeWidth={6} fill="none" opacity={0.6} />
 			{/* boca */}
-			<ellipse cx={0} cy={85} rx={16 + open * 30} ry={4 + open * 60} fill="#0b0508" />
+			{scream > 0.5 ? (
+				// boca desencajada, más larga que la cara
+				<path d={`M -38 50 Q -55 ${150 + scream * 60} 0 ${190 + scream * 80} Q 55 ${150 + scream * 60} 38 50 Q 0 35 -38 50 Z`} fill="#0b0508" />
+			) : (
+				<ellipse cx={0} cy={85} rx={16 + open * 30} ry={4 + open * 60} fill="#0b0508" />
+			)}
 			{/* mechones que cubren media cara */}
 			<path d="M -120 -60 Q -60 -150 20 -150 Q -30 -60 -40 80 Q -55 200 -70 260 Q -110 160 -120 -60 Z" fill="#07070b" />
 			<path d="M 120 -60 Q 90 -150 30 -150 Q 80 -40 70 120 Q 85 180 100 220 Q 125 120 120 -60 Z" fill="#07070b" />

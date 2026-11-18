@@ -6,7 +6,7 @@ Reels verticales (1080×1920) de **historias de terror animadas en 2D** con pers
 |------|-------------|----------|
 | Voces | **Qwen3-TTS** (Alibaba, Apache 2.0) + ffmpeg | Narrador, Lucía y fantasma clonados de voces diseñadas y elegidas en un casting; Whisper revisa cada frase |
 | Subtítulos | **Whisper** (repo `whisper`, modelo `small`) | Tiempos palabra a palabra; el texto sale del guion |
-| SFX | `scripts/sfx.py` | Drone, golpes, crujido, latido y golpe de susto sintetizados |
+| SFX | `scripts/sfx.py` + `public/audio/scream.wav` | Ambiente, golpes, crujido y latido sintetizados; grito real CC0 diseñado por capas para el susto (ver `public/audio/CREDITS.md`) |
 | Animación | **Remotion** | Sets SVG, personajes con parpadeo, miedo y lip-sync, cámara, grano, susto final |
 
 > ElevenLabs queda fuera del piloto: todo el TTS es local y gratuito.
@@ -39,6 +39,7 @@ Copia `stories/el-armario.json`. Cada escena tiene:
 - `camera`: `zoomIn` | `slowZoomIn` | `shake` | `closeKid` | `panCloset` | `dolly` | `jumpscare` | `none`
 - `kid`: `{x, mood: normal|scared|hiding, look}` · `ghost`: `{where: closet|underbed}` · `closet`: 0..1 (apertura)
 - `sfx`: `knock` | `creak` | `heartbeat` | `sting` · `clock`, `showTitle`, `pauseAfter`
+- `hitDelay` (susto): segundos de silencio entre el final de la frase y el golpe. Con `"sfx": "scream"` suena el grito de `public/audio/scream.wav`, alineado con el golpe visual, y el ambiente se apaga justo antes
 - `intensity` (0..1): dramatismo de la escena con Chatterbox (sube `exaggeration`, baja `cfg`). Con `"beats": true` en la voz, cada `...` del texto se convierte en una pausa real (`beatPause`, 0.45 s por defecto)
 
 El susto (`camera: "jumpscare"`) cae justo al terminar la frase de esa escena.

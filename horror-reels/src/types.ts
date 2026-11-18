@@ -19,7 +19,9 @@ export type Scene = {
 	kid?: {x: number; mood: Mood; look: number};
 	ghost?: {where: 'closet' | 'underbed'};
 	closet?: number;
-	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat';
+	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream';
+	/** susto: segundos de silencio entre el final de la frase y el golpe */
+	hitDelay?: number;
 	clock?: string;
 	showTitle?: boolean;
 	pauseAfter?: number;
@@ -55,6 +57,8 @@ export type SceneCtx = {
 	dur: number;
 	/** frame (relativo) en que termina de hablar */
 	speechEndF: number;
+	/** frame (relativo) del golpe del susto */
+	hitF: number;
 	/** apertura de boca 0..1 del personaje que habla */
 	mouth: number;
 };
