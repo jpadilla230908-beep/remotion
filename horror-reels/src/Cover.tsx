@@ -81,7 +81,7 @@ export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
 			{/* marca del canal */}
 			{/* abajo, dentro del recorte 3:4 de la cuadrícula del perfil (y 240–1680) */}
 			<AbsoluteFill style={{background: 'linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 22%, rgba(0,0,0,0) 40%)'}} />
-			<div style={{position: 'absolute', top: 1520, width: '100%', textAlign: 'center', fontFamily: 'Creepster', fontSize: 92, color: '#e9e4dc', letterSpacing: 3, textShadow: '0 0 30px rgba(255,0,30,0.45), 0 6px 0 #000'}}>
+			<div style={{position: 'absolute', top: 1560, width: '100%', textAlign: 'center', fontFamily: 'Creepster', fontSize: 52, color: '#e9e4dc', letterSpacing: 2, textShadow: '0 0 30px rgba(255,0,30,0.45), 0 6px 0 #000'}}>
 				Scary <span style={{color: RED}}>Tellings</span>
 			</div>
 
