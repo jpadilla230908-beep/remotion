@@ -1,4 +1,10 @@
-"""Genera la pista de voz de una historia con Kokoro (TTS local, sin API).
+"""Genera la pista de voz de una historia con TTS local (sin API).
+
+Motores por voz ("engine" en story.voices):
+  - "kokoro"     rápido, algo robótico
+  - "chatterbox" Chatterbox Multilingual: voz humana, con control de dramatismo
+                 ("exaggeration", "cfg", "temperature") y clonación opcional
+                 desde un audio de referencia ("ref", ruta relativa al proyecto)
 
 Uso: python scripts/voices.py stories/el-armario.json
 
@@ -17,7 +23,6 @@ import tempfile
 
 import numpy as np
 import soundfile as sf
-from kokoro_onnx import Kokoro
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS = os.environ.get("MODELS_DIR", "/home/user/models")
@@ -35,12 +40,12 @@ FX = {
 }
 
 
-def apply_fx(samples: np.ndarray, fx: str) -> np.ndarray:
+def apply_fx(samples: np.ndarray, fx: str, sr: int = SR) -> np.ndarray:
     with tempfile.TemporaryDirectory() as tmp:
         src, dst = os.path.join(tmp, "in.wav"), os.path.join(tmp, "out.wav")
-        sf.write(src, samples, SR)
+        sf.write(src, samples, sr)
         # pad final para que el eco no se corte
-        chain = FX.get(fx, "anull") + ",apad=pad_dur=0.25"
+        chain = f"aresample={SR}," + FX.get(fx, "anull") + ",apad=pad_dur=0.25"
         subprocess.run(
             ["ffmpeg", "-loglevel", "error", "-y", "-i", src, "-af", chain, "-ar", str(SR), "-ac", "1", dst],
             check=True,
@@ -49,21 +54,52 @@ def apply_fx(samples: np.ndarray, fx: str) -> np.ndarray:
     return out
 
 
+_engines = {}
+
+
+def synth(text: str, v: dict) -> tuple:
+    """Devuelve (muestras float32, sample rate) según el motor de la voz."""
+    engine = v.get("engine", "kokoro")
+    if engine == "kokoro":
+        if "kokoro" not in _engines:
+            from kokoro_onnx import Kokoro
+
+            _engines["kokoro"] = Kokoro(os.path.join(MODELS, "kokoro-v1.0.onnx"), os.path.join(MODELS, "voices-v1.0.bin"))
+        samples, sr = _engines["kokoro"].create(text, voice=v["voice"], speed=v.get("speed", 1.0), lang="es")
+        return np.asarray(samples, dtype=np.float32), sr
+    if engine == "chatterbox":
+        if "chatterbox" not in _engines:
+            import torch
+            from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+
+            torch.manual_seed(int(os.environ.get("TTS_SEED", "7")))
+            _engines["chatterbox"] = ChatterboxMultilingualTTS.from_pretrained(device="cpu")
+        model = _engines["chatterbox"]
+        ref = v.get("ref")
+        wav = model.generate(
+            text,
+            language_id="es",
+            audio_prompt_path=os.path.join(ROOT, ref) if ref else None,
+            exaggeration=v.get("exaggeration", 0.5),
+            cfg_weight=v.get("cfg", 0.5),
+            temperature=v.get("temperature", 0.8),
+        )
+        return wav.squeeze(0).cpu().numpy().astype(np.float32), model.sr
+    raise ValueError(f"Motor de voz desconocido: {engine}")
+
+
 def main(story_path: str) -> None:
     story = json.load(open(story_path, encoding="utf-8"))
     out_dir = os.path.join(ROOT, "public", "reels", story["id"])
     os.makedirs(os.path.join(out_dir, "scenes"), exist_ok=True)
-
-    kokoro = Kokoro(os.path.join(MODELS, "kokoro-v1.0.onnx"), os.path.join(MODELS, "voices-v1.0.bin"))
 
     track = [np.zeros(int(LEAD_IN * SR), dtype=np.float32)]
     cursor = LEAD_IN
     timeline = []
     for scene in story["scenes"]:
         v = story["voices"][scene["speaker"]]
-        samples, sr = kokoro.create(scene["text"], voice=v["voice"], speed=v.get("speed", 1.0), lang="es")
-        assert sr == SR, sr
-        samples = apply_fx(np.asarray(samples, dtype=np.float32), v.get("fx", "seco"))
+        samples, sr = synth(scene["text"], v)
+        samples = apply_fx(samples, v.get("fx", "seco"), sr)
         peak = float(np.max(np.abs(samples))) or 1.0
         samples = samples / peak * 0.9
         sf.write(os.path.join(out_dir, "scenes", f"{scene['id']}.wav"), samples, SR)
