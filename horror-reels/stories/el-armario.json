@@ -116,7 +116,7 @@
       "id": "s7",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Lucía no contestó. Se tapó con la manta... y empezó a contar, muy despacio, hasta cien.",
+      "text": "Lucía no contestó. Se tapó con la manta... y cerró los ojos con fuerza.",
       "camera": "zoomIn",
       "kid": {
         "x": 760,
@@ -128,25 +128,10 @@
       "intensity": 0.5
     },
     {
-      "id": "s7b",
-      "set": "bedroom",
-      "speaker": "lucia",
-      "text": "Noventa y ocho... noventa y nueve... cien.",
-      "camera": "slowZoomIn",
-      "kid": {
-        "x": 760,
-        "mood": "hiding",
-        "look": 0
-      },
-      "closet": 0.35,
-      "sfx": "heartbeat",
-      "pauseAfter": 0.6
-    },
-    {
       "id": "s8",
       "set": "bedroom",
       "speaker": "narrador",
-      "text": "Cuando llegó a cien... la voz ya no venía del armario.",
+      "text": "Pero cuando volvió a oír la voz... ya no venía del armario.",
       "camera": "slowZoomIn",
       "kid": {
         "x": 760,
@@ -155,7 +140,7 @@
       },
       "closet": 1,
       "pauseAfter": 1.0,
-      "sfx": "creak",
+      "sfx": "heartbeat",
       "intensity": 0.8
     },
     {
