@@ -8,7 +8,7 @@ export type CameraMove =
 	| 'panCloset'
 	| 'dolly'
 	| 'jumpscare';
-export type Mood = 'normal' | 'scared' | 'hiding';
+export type Mood = 'normal' | 'scared' | 'hiding' | 'sleeping';
 
 export type Scene = {
 	id: string;
@@ -16,7 +16,8 @@ export type Scene = {
 	speaker: string;
 	text: string;
 	camera: CameraMove;
-	kid?: {x: number; mood: Mood; look: number};
+	/** wakeAt: segundos de la escena en que se despierta de golpe (antes, duerme) */
+	kid?: {x: number; mood: Mood; look: number; wakeAt?: number};
 	ghost?: {where: 'closet' | 'underbed'};
 	closet?: number;
 	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream';

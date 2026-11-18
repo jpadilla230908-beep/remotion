@@ -27,8 +27,8 @@
       "camera": "zoomIn",
       "kid": {
         "x": 760,
-        "mood": "normal",
-        "look": -1
+        "mood": "sleeping",
+        "look": 0
       },
       "closet": 0,
       "showTitle": true,
@@ -43,7 +43,8 @@
       "kid": {
         "x": 760,
         "mood": "scared",
-        "look": -1
+        "look": -1,
+        "wakeAt": 0.55
       },
       "closet": 0,
       "sfx": "knock",

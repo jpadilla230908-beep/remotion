@@ -69,6 +69,11 @@ const Wardrobe: React.FC<{open: number; ctx: SceneCtx}> = ({open, ctx}) => {
 
 const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 	const kid = ctx.scene.kid;
+	// despertar de golpe: antes de wakeAt duerme; al despertar se incorpora de un salto
+	const wakeF = kid?.wakeAt !== undefined ? Math.round(kid.wakeAt * 30) : null;
+	const sleeping = kid?.mood === 'sleeping' || (wakeF !== null && ctx.f < wakeF);
+	const sinceWake = wakeF !== null ? ctx.f - wakeF : 999;
+	const jumpY = interpolate(sinceWake, [0, 3, 7, 12], [90, -35, 6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	const hiding = kid?.mood === 'hiding';
 	const shiver = hiding ? Math.sin(ctx.f * 1.6) * 3 : 0;
 	return (
@@ -76,18 +81,53 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			{/* cabecero */}
 			<rect x={980} y={930} width={80} height={460} rx={14} fill="#3b2a4a" />
 			<rect x={520} y={1180} width={540} height={150} rx={20} fill="#e6e1f0" />
-			{/* niña */}
-			{kid && (
-				<g transform={`translate(${kid.x}, ${hiding ? 1105 : 1010})`}>
+			{/* niña dormida: acostada con la cabeza en la almohada */}
+			{kid && sleeping && (
+				<>
+					<rect x={890} y={1110} width={130} height={90} rx={40} fill="#f4f1fa" />
+					<g transform="translate(925, 1135) rotate(80)">
+						<Kid frame={ctx.f} mood="sleeping" look={0} mouth={0} scale={0.6} />
+					</g>
+					{[0, 1, 2].map((i) => {
+						const t = ((ctx.f + i * 25) % 75) / 75;
+						return (
+							<text key={i} x={980 + t * 50 + i * 8} y={1040 - t * 140} fontFamily="Anton, sans-serif" fontSize={34 + i * 10} fill="#cfd8ff" opacity={Math.sin(t * Math.PI) * 0.8}>
+								z
+							</text>
+						);
+					})}
+				</>
+			)}
+			{/* niña sentada */}
+			{kid && !sleeping && (
+				<g transform={`translate(${kid.x}, ${(hiding ? 1105 : 1010) + jumpY})`}>
 					<Kid frame={ctx.f} mood={kid.mood} look={kid.look} mouth={ctx.scene.speaker === 'lucia' ? ctx.mouth : 0} scale={0.85} />
+					{sinceWake >= 0 && sinceWake < 28 && (
+						<text
+							x={95}
+							y={-150}
+							fontFamily="Anton, sans-serif"
+							fontSize={110}
+							fill="#ff2a3a"
+							stroke="#000"
+							strokeWidth={6}
+							paintOrder="stroke"
+							transform={`scale(${interpolate(sinceWake, [0, 4, 8], [0.3, 1.25, 1], {extrapolateRight: 'clamp'})})`}
+							opacity={interpolate(sinceWake, [20, 28], [1, 0], {extrapolateLeft: 'clamp'})}
+						>
+							!
+						</text>
+					)}
 				</g>
 			)}
 			{/* almohada */}
-			<rect x={890} y={1110} width={130} height={90} rx={40} fill="#f4f1fa" />
+			{!sleeping && <rect x={890} y={1110} width={130} height={90} rx={40} fill="#f4f1fa" />}
 			{/* manta */}
 			<path
 				d={
-					hiding
+					sleeping
+						? `M 500 1340 Q 515 1190 600 ${1170 + Math.sin(ctx.f / 40) * 4} Q 760 ${1150 + Math.sin(ctx.f / 40) * 5} 880 1160 L 905 1240 L 1060 1240 L 1060 1340 Z`
+						: hiding
 						? `M 500 1340 Q 520 ${1110 + shiver} 640 ${1085 + shiver} Q 760 ${1050 + shiver} 880 ${1090 + shiver} Q 1020 1120 1060 1340 Z`
 						: 'M 500 1340 Q 515 1235 600 1230 L 1060 1235 L 1060 1340 Z'
 				}
@@ -105,7 +145,7 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			{/* hueco oscuro debajo de la cama */}
 			<rect x={560} y={1340} width={460} height={70} fill="#050508" />
 			{ctx.scene.clock && (
-				<g transform="translate(900, 1110)">
+				<g transform="translate(870, 760)">
 					<rect x={-55} y={-35} width={110} height={60} rx={10} fill="#111" stroke="#333" strokeWidth={4} />
 					<text
 						x={0}

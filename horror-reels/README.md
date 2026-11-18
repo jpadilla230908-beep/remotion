@@ -37,7 +37,7 @@ Copia `stories/el-armario.json`. Cada escena tiene:
 - `set`: `bedroom` | `hallway` | `closet` | `underbed` | `black`
 - `speaker`: una clave de `voices` (voces de Kokoro en español: `em_alex`, `em_santa`, `ef_dora`)
 - `camera`: `zoomIn` | `slowZoomIn` | `shake` | `closeKid` | `panCloset` | `dolly` | `jumpscare` | `none`
-- `kid`: `{x, mood: normal|scared|hiding, look}` · `ghost`: `{where: closet|underbed}` · `closet`: 0..1 (apertura)
+- `kid`: `{x, mood: normal|scared|hiding|sleeping, look, wakeAt}`. Con `wakeAt` (segundos) la niña duerme hasta ese momento y se despierta de un salto · `ghost`: `{where: closet|underbed}` · `closet`: 0..1 (apertura)
 - `sfx`: `knock` | `creak` | `heartbeat` | `sting` · `clock`, `showTitle`, `pauseAfter`
 - `hitDelay` (susto): segundos de silencio entre el final de la frase y el golpe. Con `"sfx": "scream"` suena el grito de `public/audio/scream.wav`, alineado con el golpe visual, y el ambiente se apaga justo antes
 - `intensity` (0..1): dramatismo de la escena con Chatterbox (sube `exaggeration`, baja `cfg`). Con `"beats": true` en la voz, cada `...` del texto se convierte en una pausa real (`beatPause`, 0.45 s por defecto)

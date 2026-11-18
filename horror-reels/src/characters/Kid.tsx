@@ -12,13 +12,14 @@ export const Kid: React.FC<{
 	mouth: number;
 	scale?: number;
 }> = ({frame, mood, look, mouth, scale = 1}) => {
-	const scared = mood !== 'normal';
+	const scared = mood === 'scared' || mood === 'hiding';
+	const sleeping = mood === 'sleeping';
 	// parpadeo cada ~3 s con algo de azar
 	const cycle = frame % 95;
 	const blinkStart = 80 + Math.floor(random(`blink-${Math.floor(frame / 95)}`) * 10);
 	const blink = cycle >= blinkStart && cycle < blinkStart + 4 ? 0.12 : 1;
 	const tremble = scared ? Math.sin(frame * 1.9) * 2.5 : 0;
-	const breathe = Math.sin(frame / 18) * 3;
+	const breathe = sleeping ? Math.sin(frame / 40) * 4 : Math.sin(frame / 18) * 3;
 	const eyeRy = (scared ? 38 : 31) * blink;
 	const pupilR = scared ? 9 : 13;
 	const lookX = look * 9 + (scared ? Math.sin(frame * 0.7) * 2 : 0);
@@ -58,7 +59,11 @@ export const Kid: React.FC<{
 				</>
 			)}
 			{/* ojos */}
-			{[-48, 48].map((x) => (
+			{sleeping
+				? [-48, 48].map((x) => (
+						<path key={x} d={`M ${x - 24} 8 Q ${x} 26 ${x + 24} 8`} stroke="#2a1b18" strokeWidth={7} fill="none" strokeLinecap="round" />
+					))
+				: [-48, 48].map((x) => (
 				<g key={x}>
 					<ellipse cx={x} cy={5} rx={27} ry={eyeRy} fill="#fff" />
 					{blink > 0.5 && (
@@ -70,7 +75,9 @@ export const Kid: React.FC<{
 				</g>
 			))}
 			{/* boca */}
-			{mouthOpen > 0.05 ? (
+			{sleeping ? (
+				<ellipse cx={0} cy={74} rx={8} ry={4 + Math.max(0, Math.sin(frame / 40)) * 3} fill="#5a1e24" />
+			) : mouthOpen > 0.05 ? (
 				<ellipse cx={0} cy={72} rx={12 + mouthOpen * 6} ry={3 + mouthOpen * 16} fill="#5a1e24" />
 			) : scared ? (
 				<ellipse cx={0} cy={74} rx={9} ry={11} fill="#5a1e24" />
