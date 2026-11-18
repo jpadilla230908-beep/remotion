@@ -5,8 +5,9 @@
     "narrador": {
       "engine": "chatterbox",
       "ref": "voices/narrador.wav",
-      "exaggeration": 0.6,
-      "cfg": 0.4,
+      "exaggeration": 0.5,
+      "cfg": 0.5,
+      "temperature": 0.7,
       "fx": "cuentacuentos"
     },
     "lucia": {
