@@ -21,6 +21,15 @@ Cada voz de `story.voices` elige motor con `engine`:
 
 Whisper comprueba cada frase de Qwen y Chatterbox, y si no coincide con el guion la vuelve a generar con otra semilla (`"qa": false` lo desactiva). Para crear voces nuevas: diseña una toma con Qwen3-TTS VoiceDesign describiéndola en texto, guárdala en `voices/` y añade su texto a `refs.json`. Más detalles en `voices/CREDITS.md`.
 
+## Historias
+
+| Historia | Archivo | Personajes y escenarios |
+|---|---|---|
+| No abras el armario | `stories/el-armario.json` | Lucía, el fantasma · dormitorio, pasillo, armario, debajo de la cama |
+| Algo te observa | `stories/algo-te-observa.json` | Tomás el guardabosques, la criatura · bosque, sendero con linterna, cabaña, ventana, susto en la cabaña |
+
+Escenarios disponibles en `set`: `bedroom`, `hallway`, `closet`, `underbed`, `forest`, `forestPath`, `cabin`, `cabinWindow`, `cabinScare`, `black`. Para el bosque, una escena admite `ranger: {x, mood: normal|scared, look, flashlight}`, `creature: {where: far|bushes|dark}` y `handprint: true`. Sonidos: `knock`, `creak`, `heartbeat`, `snap` (rama), `static` (radio), `scream` y `scream_creature`.
+
 ## Uso
 
 ```bash

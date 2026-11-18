@@ -92,9 +92,32 @@ def heartbeat(sec=2.0):
     return norm(out)
 
 
+def snap(sec=0.9):
+    """Rama que cruje: chasquidos secos y un crujido de madera."""
+    out = np.zeros(int(sec * SR))
+    for at, g in [(0.0, 1.0), (0.05, 0.6), (0.11, 0.8), (0.2, 0.4)]:
+        x = t(0.08)
+        c = rng.standard_normal(len(x)) * np.exp(-x * 90) * g
+        c = np.convolve(c, [1, -0.9], "same")
+        s = int(at * SR)
+        out[s:s + len(c)] += c
+    x = t(sec)
+    out += np.sin(2 * np.pi * 180 * x * (1 + rng.standard_normal(len(x)).cumsum() / SR * 0.2)) * np.exp(-x * 9) * 0.25
+    return norm(out)
+
+
+def static(sec=1.2):
+    """Estática de radio con cortes."""
+    x = t(sec)
+    n = rng.standard_normal(len(x))
+    gate = (np.sin(2 * np.pi * 7 * x) > -0.3).astype(float) * 0.7 + 0.3
+    band = np.convolve(n, np.hanning(9), "same")
+    return norm(band * gate * env(len(x), 0.02, 0.3), 0.6)
+
+
 if __name__ == "__main__":
     d = os.path.join(ROOT, "public", "sfx")
     os.makedirs(d, exist_ok=True)
-    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat)]:
+    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat), ("snap", snap), ("static", static)]:
         sf.write(os.path.join(d, f"{name}.wav"), fn(), SR)
         print("sfx:", name)

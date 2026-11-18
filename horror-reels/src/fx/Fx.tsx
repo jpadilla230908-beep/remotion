@@ -112,11 +112,12 @@ export const Title: React.FC<{text: string; f: number; dur: number}> = ({text, f
 };
 
 /** Subtítulos karaoke: grupos de hasta 3 palabras, la activa en rojo */
-export const Captions: React.FC<{words: Word[]; t: number; fps: number; center: boolean}> = ({
+export const Captions: React.FC<{words: Word[]; t: number; fps: number; center: boolean; high?: boolean}> = ({
 	words,
 	t,
 	fps,
 	center,
+	high = false,
 }) => {
 	const pages: Word[][] = [];
 	let cur: Word[] = [];
@@ -139,7 +140,7 @@ export const Captions: React.FC<{words: Word[]; t: number; fps: number; center: 
 	const pop = spring({frame: pageAge, fps, config: {damping: 12, stiffness: 200}});
 
 	return (
-		<AbsoluteFill style={{justifyContent: center ? 'center' : 'flex-end', alignItems: 'center', paddingBottom: center ? 0 : 470}}>
+		<AbsoluteFill style={{justifyContent: center ? 'center' : high ? 'flex-start' : 'flex-end', alignItems: 'center', paddingBottom: center || high ? 0 : 470, paddingTop: high ? 640 : 0}}>
 			<div
 				style={{
 					fontFamily: anton,

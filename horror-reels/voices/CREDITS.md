@@ -9,3 +9,4 @@ cada personaje mantenga la misma voz en todas las frases. El texto de cada toma 
 | `narrador.wav` | Narrador (casting N3) | Locutor maduro de un programa de terror nocturno: barítono profundo, cálido y seguro, dicción clara, crea suspenso. Acento latinoamericano neutro. |
 | `nina.wav` | Lucía (casting G5) | Niña real de 8 años grabada en su cuarto de noche: voz infantil natural, asustada e insegura, algo temblorosa. Acento latinoamericano neutro. |
 | `fantasma.wav` | Fantasma | Niña fantasma de unos 10 años: susurro hueco y aireado, calma fría e inquietante, algo cantarina. |
+- `tomas.wav`: Tomás, el guardabosques. Diseñada con Qwen3-TTS VoiceDesign: hombre de unos 45 años, voz media-grave algo áspera, inquieto. La radio de «Algo te observa» usa esta misma voz, distorsionada.

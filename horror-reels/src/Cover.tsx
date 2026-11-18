@@ -1,5 +1,7 @@
 import {AbsoluteFill} from 'remotion';
 import './fx/Fx'; // carga las fuentes Creepster y Anton
+import {CreatureEyes} from './characters/Creature';
+import {Forest} from './sets/ForestSets';
 import {Bedroom, Defs} from './sets/Sets';
 import type {SceneCtx} from './types';
 
@@ -8,6 +10,8 @@ export type CoverProps = {
 	lines: string[];
 	/** subtítulo pequeño bajo el título */
 	tag: string;
+	/** escena de fondo: el dormitorio de «el armario» o el bosque de «algo te observa» */
+	scene?: 'armario' | 'bosque';
 };
 
 const RED = '#ff2a3a';
@@ -35,7 +39,23 @@ const Line: React.FC<{text: string; size: number}> = ({text, size}) => {
  * entreabierto con los ojos del fantasma y unos dedos pálidos en el borde.
  * El título queda en la zona central que TikTok muestra en la cuadrícula del perfil (3:4).
  */
-export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
+export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => {
+	const forest: SceneCtx = {
+		scene: {
+			id: 'cover',
+			set: 'forest',
+			speaker: 'narrador',
+			text: '',
+			camera: 'none',
+			ranger: {x: 330, mood: 'scared', look: 1, flashlight: true},
+			creature: {where: 'far'},
+		},
+		f: 100,
+		dur: 120,
+		speechEndF: 0,
+		hitF: 0,
+		mouth: 0,
+	};
 	const ctx: SceneCtx = {
 		scene: {
 			id: 'cover',
@@ -56,8 +76,21 @@ export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
 	};
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
+			{scene === 'bosque' ? (
+				<AbsoluteFill style={{transform: 'translate(40px, -110px) scale(1.15)', transformOrigin: '50% 60%', filter: 'brightness(1.35)'}}>
+					<svg viewBox="0 0 1080 1920" width={1080} height={1920}>
+						<Defs />
+						<Forest ctx={forest} />
+						{/* más ojos entre los arbustos */}
+						<g transform="translate(900, 1560)">
+							<CreatureEyes frame={10} size={1} gap={60} />
+						</g>
+					</svg>
+				</AbsoluteFill>
+			) : (
+				<>
 			{/* escena: encuadre bajo, del armario a la cama */}
-			<AbsoluteFill style={{transform: 'translate(-60px, 330px) scale(1.18)', transformOrigin: '50% 60%'}}>
+				<AbsoluteFill style={{transform: 'translate(-60px, 330px) scale(1.18)', transformOrigin: '50% 60%'}}>
 				<svg viewBox="0 0 1080 1920" width={1080} height={1920}>
 					<Defs />
 					<Bedroom ctx={ctx} />
@@ -73,6 +106,8 @@ export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
 					<rect x={262} y={570} width={70} height={840} fill={RED} opacity={0.08} />
 				</svg>
 			</AbsoluteFill>
+				</>
+			)}
 			{/* oscurecer arriba para que el título se lea */}
 			<AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0) 52%)'}} />
 			<AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 60%, transparent 40%, rgba(0,0,0,0.85) 100%)'}} />

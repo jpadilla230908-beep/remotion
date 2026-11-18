@@ -1,0 +1,179 @@
+{
+  "id": "algo-te-observa",
+  "title": "ALGO TE\nOBSERVA",
+  "voices": {
+    "narrador": {
+      "engine": "qwen",
+      "ref": "voices/narrador.wav",
+      "fx": "sala"
+    },
+    "tomas": {
+      "engine": "qwen",
+      "ref": "voices/tomas.wav",
+      "fx": "sala"
+    },
+    "radio": {
+      "engine": "qwen",
+      "ref": "voices/tomas.wav",
+      "fx": "radio"
+    }
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "set": "forest",
+      "speaker": "narrador",
+      "text": "Tomás llevaba quince años cuidando este bosque... y nunca había tenido miedo.",
+      "camera": "zoomIn",
+      "ranger": {
+        "x": 540,
+        "mood": "normal",
+        "look": 0,
+        "flashlight": true
+      },
+      "showTitle": true,
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s2",
+      "set": "forest",
+      "speaker": "narrador",
+      "text": "Hasta la noche en que los pájaros dejaron de cantar.",
+      "camera": "slowZoomIn",
+      "ranger": {
+        "x": 540,
+        "mood": "scared",
+        "look": -1,
+        "flashlight": true
+      },
+      "creature": {
+        "where": "bushes"
+      },
+      "sfx": "heartbeat",
+      "pauseAfter": 0.5
+    },
+    {
+      "id": "s3",
+      "set": "forestPath",
+      "speaker": "tomas",
+      "text": "¿Hola? ¿Hay alguien ahí?",
+      "camera": "zoomIn",
+      "ranger": {
+        "x": 380,
+        "mood": "scared",
+        "look": 1,
+        "flashlight": true
+      },
+      "creature": {
+        "where": "dark"
+      },
+      "pauseAfter": 0.8
+    },
+    {
+      "id": "s4",
+      "set": "forest",
+      "speaker": "narrador",
+      "text": "Nadie contestó. Pero entre los árboles... algo se movió.",
+      "camera": "zoomIn",
+      "ranger": {
+        "x": 300,
+        "mood": "scared",
+        "look": 1,
+        "flashlight": true
+      },
+      "creature": {
+        "where": "far"
+      },
+      "sfx": "snap",
+      "pauseAfter": 0.5
+    },
+    {
+      "id": "s5",
+      "set": "cabin",
+      "speaker": "narrador",
+      "text": "Tomás corrió a su cabaña y cerró la puerta con llave.",
+      "camera": "zoomIn",
+      "ranger": {
+        "x": 420,
+        "mood": "scared",
+        "look": -1
+      },
+      "sfx": "creak",
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s6",
+      "set": "cabin",
+      "speaker": "tomas",
+      "text": "Base, aquí Tomás. Hay algo en el bosque. Repito, hay algo en el bosque.",
+      "camera": "zoomIn",
+      "ranger": {
+        "x": 520,
+        "mood": "scared",
+        "look": 1
+      },
+      "sfx": "static",
+      "pauseAfter": 0.6
+    },
+    {
+      "id": "s7",
+      "set": "cabin",
+      "speaker": "narrador",
+      "text": "La radio respondió... con su propia voz.",
+      "camera": "slowZoomIn",
+      "ranger": {
+        "x": 520,
+        "mood": "scared",
+        "look": 1
+      },
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s8",
+      "set": "cabin",
+      "speaker": "radio",
+      "text": "Tomás... ábreme. Ya estoy aquí afuera.",
+      "camera": "shake",
+      "ranger": {
+        "x": 520,
+        "mood": "scared",
+        "look": 1
+      },
+      "sfx": "static",
+      "pauseAfter": 0.8
+    },
+    {
+      "id": "s9",
+      "set": "cabinWindow",
+      "speaker": "narrador",
+      "text": "Tomás miró por la ventana. No había nadie... solo una mano marcada en el cristal. Por dentro.",
+      "camera": "zoomIn",
+      "handprint": true,
+      "sfx": "heartbeat",
+      "pauseAfter": 1.0
+    },
+    {
+      "id": "s10",
+      "set": "cabinScare",
+      "speaker": "narrador",
+      "text": "Porque ya estaba dentro.",
+      "camera": "jumpscare",
+      "ranger": {
+        "x": 330,
+        "mood": "scared",
+        "look": -1
+      },
+      "sfx": "scream_creature",
+      "hitDelay": 0.5,
+      "pauseAfter": 2.6
+    },
+    {
+      "id": "s11",
+      "set": "black",
+      "speaker": "narrador",
+      "text": "Y tú... ¿estás seguro de que estás solo?",
+      "camera": "none",
+      "pauseAfter": 1.5
+    }
+  ]
+}
