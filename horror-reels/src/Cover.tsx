@@ -79,7 +79,9 @@ export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
 			<AbsoluteFill style={{background: '#14224a', mixBlendMode: 'multiply', opacity: 0.3}} />
 
 			{/* marca del canal */}
-			<div style={{position: 'absolute', top: 150, width: '100%', textAlign: 'center', fontFamily: 'Creepster', fontSize: 52, color: '#e9e4dc', letterSpacing: 2, opacity: 0.9}}>
+			{/* abajo, dentro del recorte 3:4 de la cuadrícula del perfil (y 240–1680) */}
+			<AbsoluteFill style={{background: 'linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 22%, rgba(0,0,0,0) 40%)'}} />
+			<div style={{position: 'absolute', top: 1520, width: '100%', textAlign: 'center', fontFamily: 'Creepster', fontSize: 92, color: '#e9e4dc', letterSpacing: 3, textShadow: '0 0 30px rgba(255,0,30,0.45), 0 6px 0 #000'}}>
 				Scary <span style={{color: RED}}>Tellings</span>
 			</div>
 
@@ -87,7 +89,7 @@ export const Cover: React.FC<CoverProps> = ({lines, tag}) => {
 			<div
 				style={{
 					position: 'absolute',
-					top: 290,
+					top: 200,
 					width: '100%',
 					padding: '0 60px',
 					boxSizing: 'border-box',
