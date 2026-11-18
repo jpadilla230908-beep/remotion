@@ -30,6 +30,14 @@ npm run studio                           # previsualizar en Remotion Studio
 
 Requisitos: `/home/user/venv` con Whisper (`pip install -e ../../whisper`) para los subtítulos, y `/home/user/venv-qwen` para las voces: `torch torchaudio` desde el índice de PyTorch para CPU, más `qwen-tts kokoro-onnx soundfile num2words` y `-e ../../whisper`. También hace falta el programa `sox` (`apt-get install sox`). Chatterbox es opcional y va en su propio entorno (`torch==2.6.0`), porque necesita otra versión de transformers. Además necesitas los modelos en `$MODELS_DIR` (por defecto `/home/user/models`): `kokoro-v1.0.onnx` y `voices-v1.0.bin`, que se descargan de las releases de GitHub de `thewh1teagle/kokoro-onnx`.
 
+## Portada
+
+`src/Cover.tsx` (composición `Portada`) genera una portada vertical de 1080×1920 con el dormitorio, Lucía y el armario. Las palabras entre `*asteriscos*` salen en rojo:
+
+```bash
+npx remotion still Portada out/portadas/portada.png --props='{"lines":["Si escuchas","3 golpes...","*No abras*"],"tag":"Historia de terror animada"}'
+```
+
 ## Escribir una historia nueva
 
 Copia `stories/el-armario.json`. Cada escena tiene:

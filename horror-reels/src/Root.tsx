@@ -1,4 +1,5 @@
-import {Composition, staticFile} from 'remotion';
+import {Composition, Still, staticFile} from 'remotion';
+import {Cover, type CoverProps} from './Cover';
 import {HorrorReel} from './HorrorReel';
 import type {ReelProps} from './types';
 
@@ -14,6 +15,14 @@ const load = async (storyId: string, file: string) => {
 
 export const RemotionRoot: React.FC = () => {
 	return (
+		<>
+		<Still
+			id="Portada"
+			component={Cover}
+			width={1080}
+			height={1920}
+			defaultProps={{lines: ['Si escuchas', '3 golpes...', '*No abras*'], tag: 'Historia de terror animada'} as CoverProps}
+		/>
 		<Composition
 			id="HorrorReel"
 			component={HorrorReel}
@@ -34,5 +43,6 @@ export const RemotionRoot: React.FC = () => {
 				};
 			}}
 		/>
+		</>
 	);
 };
