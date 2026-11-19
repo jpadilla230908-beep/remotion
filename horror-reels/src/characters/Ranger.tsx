@@ -1,5 +1,24 @@
 import {random} from 'remotion';
 
+const HAND = {x: 235, y: 115};
+const tremble = (frame: number, scared: boolean) => (scared ? Math.sin(frame * 1.7) * 2.5 : 0);
+const breathe = (frame: number, scared: boolean) => Math.sin(frame / (scared ? 9 : 20)) * 3;
+
+/**
+ * Punto exacto del cristal de la linterna, relativo al origen donde se coloca
+ * <Ranger> (incluye el temblor y la respiración), para que el haz salga de ahí.
+ */
+export const flashlightTip = (frame: number, mood: 'normal' | 'scared', scale: number, angle: number) => {
+	const a = (angle * Math.PI) / 180;
+	const dx = 73;
+	const dy = 0;
+	const scared = mood === 'scared';
+	return {
+		x: tremble(frame, scared) + scale * (HAND.x + dx * Math.cos(a) - dy * Math.sin(a)),
+		y: breathe(frame, scared) + scale * (HAND.y + dx * Math.sin(a) + dy * Math.cos(a)),
+	};
+};
+
 /**
  * Tomás, el guardabosques. Chibi como Lucía: centro de la cabeza en (0,0).
  * mood: normal | scared. flashlight: brazo derecho levantado con la linterna
@@ -11,20 +30,22 @@ export const Ranger: React.FC<{
 	look: number;
 	mouth: number;
 	flashlight?: boolean;
+	/** ángulo de la linterna en grados (0 = horizontal a la derecha) */
+	flashAngle?: number;
 	scale?: number;
-}> = ({frame, mood, look, mouth, flashlight = false, scale = 1}) => {
+}> = ({frame, mood, look, mouth, flashlight = false, flashAngle = -20, scale = 1}) => {
 	const scared = mood === 'scared';
 	const cycle = frame % 110;
 	const blinkStart = 90 + Math.floor(random(`rblink-${Math.floor(frame / 110)}`) * 12);
 	const blink = cycle >= blinkStart && cycle < blinkStart + 4 ? 0.12 : 1;
-	const tremble = scared ? Math.sin(frame * 1.7) * 2.5 : 0;
-	const breathe = Math.sin(frame / (scared ? 9 : 20)) * 3;
+	const tr = tremble(frame, scared);
+	const br = breathe(frame, scared);
 	const eyeRy = (scared ? 26 : 20) * blink;
 	const lookX = look * 8 + (scared ? Math.sin(frame * 0.8) * 2 : 0);
 	const open = Math.min(1, mouth);
 	const skin = '#e2b896';
 	return (
-		<g transform={`translate(${tremble}, ${breathe}) scale(${scale})`}>
+		<g transform={`translate(${tr}, ${br}) scale(${scale})`}>
 			{/* cuerpo: camisa caqui, chaleco verde */}
 			<path d="M -120 120 Q -150 330 -165 380 L 165 380 Q 150 330 120 120 Z" fill="#8a7a52" />
 			<path d="M -120 120 Q -140 300 -150 380 L -60 380 L -40 140 Z M 120 120 Q 140 300 150 380 L 60 380 L 40 140 Z" fill="#3f5a3a" />
@@ -38,8 +59,10 @@ export const Ranger: React.FC<{
 				<>
 					<path d="M 125 150 Q 200 170 230 120" stroke="#8a7a52" strokeWidth={46} strokeLinecap="round" fill="none" />
 					<circle cx={235} cy={115} r={26} fill={skin} />
-					<rect x={230} y={92} width={70} height={30} rx={8} fill="#2b2b33" transform="rotate(-20 235 115)" />
-					<rect x={292} y={84} width={16} height={40} rx={4} fill="#fff1c2" transform="rotate(-20 235 115)" />
+					<g transform={`rotate(${flashAngle} ${HAND.x} ${HAND.y})`}>
+						<rect x={230} y={100} width={70} height={30} rx={8} fill="#2b2b33" />
+						<rect x={292} y={95} width={16} height={40} rx={4} fill="#fff1c2" />
+					</g>
 				</>
 			) : (
 				<>

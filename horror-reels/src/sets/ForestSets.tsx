@@ -1,6 +1,6 @@
 import {interpolate, random} from 'remotion';
 import {CreatureBody, CreatureEyes, CreatureFace} from '../characters/Creature';
-import {Ranger} from '../characters/Ranger';
+import {Ranger, flashlightTip} from '../characters/Ranger';
 import type {SceneCtx} from '../types';
 
 const W = 1080;
@@ -64,6 +64,8 @@ const Beam: React.FC<{x: number; y: number; angle: number; len?: number}> = ({x,
 export const Forest: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 	const r = ctx.scene.ranger;
 	const walk = r && r.mood === 'normal' ? Math.abs(Math.sin(ctx.f / 7)) * -10 : 0;
+	const beamAngle = -18 + Math.sin(ctx.f / 25) * 8;
+	const tip = r ? flashlightTip(ctx.f, r.mood, 0.62, beamAngle) : {x: 0, y: 0};
 	const where = ctx.scene.creature?.where;
 	const farOpacity = interpolate(ctx.f, [ctx.dur * 0.35, ctx.dur * 0.6], [0, 0.85], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	return (
@@ -88,10 +90,10 @@ export const Forest: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			<Fog f={ctx.f + 300} y={1420} />
 			{r && (
 				<g transform={`translate(${r.x}, ${1330 + walk})`}>
-					<Ranger frame={ctx.f} mood={r.mood} look={r.look} mouth={ctx.scene.speaker === 'tomas' ? ctx.mouth : 0} flashlight={r.flashlight} scale={0.62} />
+					<Ranger frame={ctx.f} mood={r.mood} look={r.look} mouth={ctx.scene.speaker === 'tomas' ? ctx.mouth : 0} flashlight={r.flashlight} flashAngle={beamAngle} scale={0.62} />
 				</g>
 			)}
-			{r?.flashlight && <Beam x={r.x + 190} y={1330 - 45} angle={-12 + Math.sin(ctx.f / 25) * 10} />}
+			{r?.flashlight && <Beam x={r.x + tip.x} y={1330 + walk + tip.y} angle={beamAngle} />}
 			{/* arbustos delante */}
 			<g fill="#05080c">
 				<ellipse cx={170} cy={1600} rx={230} ry={120} />
@@ -111,6 +113,7 @@ export const Forest: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 export const ForestPath: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 	const r = ctx.scene.ranger ?? {x: 380, mood: 'scared' as const, look: 1, flashlight: true};
 	const angle = -18 + Math.sin(ctx.f / 16) * 28;
+	const tip = flashlightTip(ctx.f, r.mood, 0.95, angle);
 	// los ojos aparecen a la izquierda cuando la linterna mira a la derecha
 	const eyesOn = ctx.scene.creature?.where === 'dark' && Math.sin(ctx.f / 16) > 0.3;
 	return (
@@ -119,7 +122,7 @@ export const ForestPath: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			{[120, 330, 760, 980].map((x, i) => (
 				<rect key={i} x={x - 45} y={0} width={90 + (i % 2) * 30} height={1500} fill="#0a0f18" />
 			))}
-			<Beam x={r.x + 150} y={1180 - 40} angle={angle} len={1100} />
+			<Beam x={r.x + tip.x} y={1240 + tip.y} angle={angle} len={1100} />
 			{/* troncos iluminados dentro del haz (más claros) */}
 			<g opacity={0.25}>
 				{[760, 980].map((x, i) => (
@@ -133,7 +136,7 @@ export const ForestPath: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 				</g>
 			)}
 			<g transform={`translate(${r.x}, 1240)`}>
-				<Ranger frame={ctx.f} mood={r.mood} look={r.look} mouth={ctx.scene.speaker === 'tomas' ? ctx.mouth : 0} flashlight scale={0.95} />
+				<Ranger frame={ctx.f} mood={r.mood} look={r.look} mouth={ctx.scene.speaker === 'tomas' ? ctx.mouth : 0} flashlight flashAngle={angle} scale={0.95} />
 			</g>
 		</g>
 	);
