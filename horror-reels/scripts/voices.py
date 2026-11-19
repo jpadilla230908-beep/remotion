@@ -49,6 +49,13 @@ FX = {
     # la radio responde con la propia voz de Tomás, pero algo más grave y rota
     "radio": f"highpass=f=350,lowpass=f=3000,asetrate={SR}*0.9,aresample={SR},atempo=1.11,"
     "acrusher=bits=8:mix=0.3,aecho=0.8:0.5:40|90:0.3|0.2,volume=1.8",
+    # voz por teléfono: banda estrecha y algo comprimida
+    "telefono": "highpass=f=400,lowpass=f=3200,acrusher=bits=10:mix=0.15,volume=1.6",
+    # voz al otro lado de la puerta: amortiguada
+    "tras_puerta": "lowpass=f=1400,aecho=0.8:0.4:25:0.3,volume=1.8",
+    # la risa del teléfono que se vuelve otra cosa
+    "risa_telefono": f"highpass=f=400,lowpass=f=3200,asetrate={SR}*0.86,aresample={SR},atempo=1.0,"
+    "aecho=0.8:0.6:60|140:0.4|0.25,volume=1.8",
     "fantasma_sala": "aecho=0.8:0.6:90|200:0.35|0.2,highpass=f=100,volume=1.3",
 }
 

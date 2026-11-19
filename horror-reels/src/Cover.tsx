@@ -1,6 +1,7 @@
 import {AbsoluteFill} from 'remotion';
 import './fx/Fx'; // carga las fuentes Creepster y Anton
 import {CreatureEyes} from './characters/Creature';
+import {GlowingGrin} from './characters/Mimic';
 import {Forest} from './sets/ForestSets';
 import {Bedroom, Defs} from './sets/Sets';
 import type {SceneCtx} from './types';
@@ -11,7 +12,7 @@ export type CoverProps = {
 	/** subtítulo pequeño bajo el título */
 	tag: string;
 	/** escena de fondo: el dormitorio de «el armario» o el bosque de «algo te observa» */
-	scene?: 'armario' | 'bosque';
+	scene?: 'armario' | 'bosque' | 'llamada';
 };
 
 const RED = '#ff2a3a';
@@ -63,10 +64,10 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 			speaker: 'narrador',
 			text: '',
 			camera: 'none',
-			kid: {x: 760, mood: 'scared', look: -1},
-			closet: 0.35,
-			ghost: {where: 'closet'},
-			clock: '3:00',
+			kid: scene === 'llamada' ? {x: 760, mood: 'scared', look: -1, variant: 'valeria', phone: true} : {x: 760, mood: 'scared', look: -1},
+			closet: scene === 'llamada' ? 0 : 0.35,
+			ghost: scene === 'llamada' ? undefined : {where: 'closet'},
+			clock: scene === 'llamada' ? '3:33' : '3:00',
 		},
 		f: 60,
 		dur: 120,
@@ -94,6 +95,16 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 				<svg viewBox="0 0 1080 1920" width={1080} height={1920}>
 					<Defs />
 					<Bedroom ctx={ctx} />
+					{scene === 'llamada' ? (
+						<>
+							{/* la puerta del cuarto, abierta a la oscuridad, con la sonrisa */}
+							<rect x={50} y={540} width={420} height={890} fill="#020203" stroke="#2b1d17" strokeWidth={14} />
+							<g transform="translate(260, 860)">
+								<GlowingGrin frame={8} size={1.6} />
+							</g>
+						</>
+					) : (
+						<>
 					{/* dedos pálidos agarrando el borde de la puerta del armario */}
 					{[0, 1, 2, 3].map((i) => (
 						<rect key={i} x={272} y={900 + i * 34} width={[46, 52, 48, 40][i]} height={22} rx={11} fill="#cfd8dc" />
@@ -104,6 +115,8 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 					<circle cx={286} cy={804} r={3} fill="#050507" />
 					{/* resplandor rojo que sale de la rendija */}
 					<rect x={262} y={570} width={70} height={840} fill={RED} opacity={0.08} />
+						</>
+					)}
 				</svg>
 			</AbsoluteFill>
 				</>

@@ -1,0 +1,133 @@
+{
+  "id": "la-llamada",
+  "title": "LA LLAMADA\nDE LAS 3:33",
+  "voices": {
+    "narrador": {
+      "engine": "qwen",
+      "ref": "voices/narrador.wav",
+      "fx": "sala"
+    },
+    "valeria": {
+      "engine": "qwen",
+      "ref": "voices/valeria.wav",
+      "fx": "sala"
+    },
+    "mama_tel": {
+      "engine": "qwen",
+      "ref": "voices/mama.wav",
+      "fx": "telefono"
+    },
+    "mama_puerta": {
+      "engine": "qwen",
+      "ref": "voices/mama.wav",
+      "fx": "tras_puerta"
+    },
+    "risa": {
+      "engine": "qwen",
+      "ref": "voices/mama.wav",
+      "fx": "risa_telefono",
+      "qa": false
+    }
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "set": "bedroom",
+      "speaker": "narrador",
+      "text": "Valeria estaba sola en casa. A las tres y treinta y tres... sonó su teléfono.",
+      "camera": "zoomIn",
+      "kid": {
+        "x": 760,
+        "variant": "valeria",
+        "phone": true,
+        "mood": "normal",
+        "look": 0
+      },
+      "closet": 0,
+      "clock": "3:33",
+      "sfx": "ring",
+      "showTitle": true,
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s2",
+      "set": "bedroom",
+      "speaker": "mama_tel",
+      "text": "Valeria, escúchame. No abras la puerta. La que está tocando... no soy yo.",
+      "camera": "closeKid",
+      "kid": {
+        "x": 760,
+        "variant": "valeria",
+        "phone": true,
+        "mood": "scared",
+        "look": 0
+      },
+      "closet": 0,
+      "clock": "3:33",
+      "pauseAfter": 0.4
+    },
+    {
+      "id": "s3",
+      "set": "hallway",
+      "speaker": "mama_puerta",
+      "text": "Valeria, ábreme. Soy mamá. Olvidé las llaves.",
+      "camera": "dolly",
+      "feetUnderDoor": true,
+      "sfx": "knock",
+      "pauseAfter": 0.4
+    },
+    {
+      "id": "s4",
+      "set": "bedroom",
+      "speaker": "valeria",
+      "text": "Mamá... ¿cuál de las dos eres tú?",
+      "camera": "closeKid",
+      "kid": {
+        "x": 760,
+        "variant": "valeria",
+        "phone": true,
+        "mood": "scared",
+        "look": -1
+      },
+      "closet": 0,
+      "clock": "3:33",
+      "pauseAfter": 0.5
+    },
+    {
+      "id": "s5",
+      "set": "bedroom",
+      "speaker": "risa",
+      "text": "Ja, ja, ja... ja, ja, ja.",
+      "camera": "slowZoomIn",
+      "kid": {
+        "x": 760,
+        "variant": "valeria",
+        "phone": true,
+        "mood": "scared",
+        "look": 0
+      },
+      "closet": 0,
+      "clock": "3:33",
+      "sfx": "heartbeat",
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s6",
+      "set": "hallwayScare",
+      "speaker": "narrador",
+      "text": "Y la risa ya no venía del teléfono... venía del pasillo.",
+      "camera": "jumpscare",
+      "sfx": "scream_mimic",
+      "hitDelay": 0.5,
+      "pauseAfter": 2.4
+    },
+    {
+      "id": "s7",
+      "set": "black",
+      "speaker": "narrador",
+      "text": "Y tú... ¿contestarías?",
+      "camera": "none",
+      "pauseAfter": 1.3
+    }
+  ]
+}

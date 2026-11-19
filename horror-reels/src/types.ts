@@ -1,4 +1,4 @@
-export type SetName = 'bedroom' | 'hallway' | 'closet' | 'underbed' | 'black' | 'forest' | 'forestPath' | 'cabin' | 'cabinWindow' | 'cabinScare';
+export type SetName = 'bedroom' | 'hallway' | 'closet' | 'underbed' | 'black' | 'forest' | 'forestPath' | 'cabin' | 'cabinWindow' | 'cabinScare' | 'hallwayScare';
 export type CameraMove =
 	| 'none'
 	| 'zoomIn'
@@ -17,14 +17,16 @@ export type Scene = {
 	text: string;
 	camera: CameraMove;
 	/** wakeAt: segundos de la escena en que se despierta de golpe (antes, duerme) */
-	kid?: {x: number; mood: Mood; look: number; wakeAt?: number};
+	kid?: {x: number; mood: Mood; look: number; wakeAt?: number; variant?: 'lucia' | 'valeria'; phone?: boolean};
 	ghost?: {where: 'closet' | 'underbed'};
 	ranger?: {x: number; mood: 'normal' | 'scared'; look: number; flashlight?: boolean};
 	creature?: {where: 'far' | 'bushes' | 'dark'};
 	/** huella de mano que aparece en el cristal (set cabinWindow) */
 	handprint?: boolean;
+	/** sombras de dos pies bajo la puerta del pasillo */
+	feetUnderDoor?: boolean;
 	closet?: number;
-	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream' | 'scream_creature' | 'snap' | 'static';
+	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream' | 'scream_creature' | 'snap' | 'static' | 'ring' | 'scream_mimic';
 	/** susto: segundos de silencio entre el final de la frase y el golpe */
 	hitDelay?: number;
 	clock?: string;

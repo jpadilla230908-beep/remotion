@@ -26,6 +26,7 @@ Whisper comprueba cada frase de Qwen y Chatterbox, y si no coincide con el guion
 | Historia | Archivo | Personajes y escenarios |
 |---|---|---|
 | No abras el armario | `stories/el-armario.json` | Lucía, el fantasma · dormitorio, pasillo, armario, debajo de la cama |
+| La llamada de las 3:33 | `stories/la-llamada.json` | Valeria (variante de la niña, con teléfono), su mamá y la imitadora · dormitorio, pasillo con pies bajo la puerta, susto en el pasillo |
 | Algo te observa | `stories/algo-te-observa.json` | Tomás el guardabosques, la criatura · bosque, sendero con linterna, cabaña, ventana, susto en la cabaña |
 
 Escenarios disponibles en `set`: `bedroom`, `hallway`, `closet`, `underbed`, `forest`, `forestPath`, `cabin`, `cabinWindow`, `cabinScare`, `black`. Para el bosque, una escena admite `ranger: {x, mood: normal|scared, look, flashlight}`, `creature: {where: far|bushes|dark}` y `handprint: true`. Sonidos: `knock`, `creak`, `heartbeat`, `snap` (rama), `static` (radio), `scream` y `scream_creature`.

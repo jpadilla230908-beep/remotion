@@ -1,6 +1,7 @@
 import {interpolate, random} from 'remotion';
 import {Ghost, GhostEyes} from '../characters/Ghost';
 import {Kid} from '../characters/Kid';
+import {GlowingGrin, MimicFace} from '../characters/Mimic';
 import type {SceneCtx} from '../types';
 
 const W = 1080;
@@ -101,7 +102,24 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			{/* niña sentada */}
 			{kid && !sleeping && (
 				<g transform={`translate(${kid.x}, ${(hiding ? 1105 : 1010) + jumpY})`}>
-					<Kid frame={ctx.f} mood={kid.mood} look={kid.look} mouth={ctx.scene.speaker === 'lucia' ? ctx.mouth : 0} scale={0.85} />
+					<Kid
+						frame={ctx.f}
+						mood={kid.mood}
+						look={kid.look}
+						mouth={ctx.scene.speaker === 'lucia' || ctx.scene.speaker === 'valeria' ? ctx.mouth : 0}
+						scale={0.85}
+						variant={kid.variant}
+					/>
+					{kid.phone && (
+						// teléfono pegado a la oreja, con la pantalla iluminada; tiembla mientras suena
+						<g transform={`translate(${118 + (ctx.scene.sfx === 'ring' && ctx.f < 70 ? Math.sin(ctx.f * 3) * 4 : 0)}, 10) rotate(12)`}>
+							<circle cx={-60} cy={10} r={150} fill="#9fd3ff" opacity={0.08} />
+							<rect x={-22} y={-50} width={44} height={84} rx={8} fill="#15171c" />
+							<rect x={-17} y={-43} width={34} height={68} rx={4} fill="#bfe3ff" filter="url(#glow)" />
+							<text x={0} y={-8} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={700} fontSize={10} fill="#15171c">MAMÁ</text>
+							<text x={0} y={8} textAnchor="middle" fontFamily="monospace" fontSize={9} fill="#15171c">3:33</text>
+						</g>
+					)}
 					{sinceWake >= 0 && sinceWake < 28 && (
 						<text
 							x={95}
@@ -241,7 +259,13 @@ export const Hallway: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			<rect x={455} y={820} width={170} height={410} fill="#3d2a20" stroke="#140d0a" strokeWidth={6} />
 			<circle cx={600} cy={1030} r={7} fill="#b08a4a" />
 			<rect x={596} y={1045} width={8} height={18} fill="#050505" />
-			<rect x={455} y={1222} width={170} height={8} fill="#ffcf7a" opacity={0.25} />
+			<rect x={455} y={1222} width={170} height={8} fill="#ffcf7a" opacity={ctx.scene.feetUnderDoor ? 0.6 : 0.25} />
+			{ctx.scene.feetUnderDoor && (
+				<g fill="#050505">
+					<rect x={492 + Math.sin(ctx.f / 20) * 3} y={1222} width={34} height={8} />
+					<rect x={552 - Math.sin(ctx.f / 20) * 3} y={1222} width={34} height={8} />
+				</g>
+			)}
 			{/* lámpara que parpadea */}
 			<line x1={540} y1={0} x2={540} y2={300} stroke="#111" strokeWidth={4} />
 			<path d="M 500 300 L 580 300 L 560 260 L 520 260 Z" fill="#2b2b2b" />
@@ -314,6 +338,36 @@ export const UnderBed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			{reveal > 0 && (
 				<g transform={`translate(540, 980) scale(${scale}) rotate(${-8 + Math.sin(ctx.f * 2.3) * 3})`} opacity={reveal}>
 					<Ghost frame={ctx.f} mouth={0} scream={reveal} />
+				</g>
+			)}
+		</g>
+	);
+};
+
+/* ---------------- SUSTO EN EL PASILLO ---------------- */
+
+export const HallwayScare: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
+	const hit = ctx.hitF;
+	const reveal = interpolate(ctx.f, [hit - 1, hit], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const scale = interpolate(ctx.f, [hit - 1, hit + 2, hit + 40], [0.5, 2.0, 2.25], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	// la sonrisa se acerca por el pasillo, cada vez más rápido
+	const k = Math.min(1, ctx.f / Math.max(1, hit));
+	const grinScale = 0.6 + 1.4 * k * k;
+	const grinY = 1000 - 120 * k * k;
+	return (
+		<g>
+			<Hallway ctx={{...ctx, scene: {...ctx.scene, feetUnderDoor: false}}} />
+			<rect width={W} height={H} fill="#000" opacity={0.6} />
+			{/* la puerta del fondo ahora está abierta */}
+			<rect x={455} y={820} width={170} height={410} fill="#000" />
+			{reveal < 1 && (
+				<g transform={`translate(540, ${grinY})`} opacity={1 - reveal}>
+					<GlowingGrin frame={ctx.f} size={grinScale} />
+				</g>
+			)}
+			{reveal > 0 && (
+				<g transform={`translate(540, 900) scale(${scale}) rotate(${-5 + Math.sin(ctx.f * 2.2) * 3})`} opacity={reveal}>
+					<MimicFace frame={ctx.f} scream={reveal} />
 				</g>
 			)}
 		</g>

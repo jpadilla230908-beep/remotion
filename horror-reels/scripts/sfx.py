@@ -115,9 +115,22 @@ def static(sec=1.2):
     return norm(band * gate * env(len(x), 0.02, 0.3), 0.6)
 
 
+def ring(sec=2.6):
+    """Tono de llamada de móvil: dos pitidos repetidos con vibración."""
+    out = np.zeros(int(sec * SR))
+    for at in [0.0, 0.35, 1.3, 1.65]:
+        x = t(0.25)
+        b = (np.sin(2 * np.pi * 880 * x) + 0.5 * np.sin(2 * np.pi * 1320 * x)) * env(len(x), 0.01, 0.05)
+        s = int(at * SR)
+        out[s:s + len(b)] += b * 0.6
+    x = t(sec)
+    buzz = np.sin(2 * np.pi * 150 * x) * (np.sin(2 * np.pi * 2 * x) > 0) * 0.25
+    return norm(out + buzz, 0.7)
+
+
 if __name__ == "__main__":
     d = os.path.join(ROOT, "public", "sfx")
     os.makedirs(d, exist_ok=True)
-    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat), ("snap", snap), ("static", static)]:
+    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat), ("snap", snap), ("static", static), ("ring", ring)]:
         sf.write(os.path.join(d, f"{name}.wav"), fn(), SR)
         print("sfx:", name)

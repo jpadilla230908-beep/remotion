@@ -11,7 +11,11 @@ export const Kid: React.FC<{
 	look: number;
 	mouth: number;
 	scale?: number;
-}> = ({frame, mood, look, mouth, scale = 1}) => {
+	/** lucia: pelo negro y lazo rojo · valeria: pelo castaño con coleta, pijama verde azulado */
+	variant?: 'lucia' | 'valeria';
+}> = ({frame, mood, look, mouth, scale = 1, variant = 'lucia'}) => {
+	const hair = variant === 'valeria' ? '#5a3220' : '#2a1b18';
+	const pj = variant === 'valeria' ? '#2f8f8a' : '#6d5bc4';
 	const scared = mood === 'scared' || mood === 'hiding';
 	const sleeping = mood === 'sleeping';
 	// parpadeo cada ~3 s con algo de azar
@@ -28,7 +32,7 @@ export const Kid: React.FC<{
 	return (
 		<g transform={`translate(${tremble}, ${breathe}) scale(${scale})`}>
 			{/* cuerpo / pijama */}
-			<path d="M -95 120 Q -120 330 -140 360 L 140 360 Q 120 330 95 120 Z" fill="#6d5bc4" />
+			<path d="M -95 120 Q -120 330 -140 360 L 140 360 Q 120 330 95 120 Z" fill={pj} />
 			<circle cx={-40} cy={210} r={8} fill="#f7e27a" opacity={0.8} />
 			<circle cx={50} cy={260} r={6} fill="#f7e27a" opacity={0.8} />
 			<circle cx={-10} cy={310} r={7} fill="#f7e27a" opacity={0.8} />
@@ -36,32 +40,37 @@ export const Kid: React.FC<{
 			<circle cx={-100} cy={250 + (scared ? -50 : 0)} r={26} fill="#e8c6b3" />
 			<circle cx={100} cy={250 + (scared ? -50 : 0)} r={26} fill="#e8c6b3" />
 			{/* pelo trasero */}
-			<path d="M -150 -10 Q -160 -170 0 -165 Q 160 -170 150 -10 L 155 110 Q 0 140 -155 110 Z" fill="#2a1b18" />
+			{variant === 'valeria' && <path d="M 120 -110 Q 230 -90 200 60 Q 185 120 150 140 Q 190 40 140 -60 Z" fill={hair} />}
+			<path d="M -150 -10 Q -160 -170 0 -165 Q 160 -170 150 -10 L 155 110 Q 0 140 -155 110 Z" fill={hair} />
 			{/* cara */}
 			<circle cx={0} cy={0} r={128} fill="#ecc9b6" />
 			{/* flequillo */}
 			<path d="M -130 -20 Q -120 -150 0 -140 Q 120 -150 130 -20 Q 90 -80 40 -70 Q 0 -100 -40 -70 Q -90 -80 -130 -20 Z" fill="#2a1b18" />
 			{/* lazo */}
-			<path d="M 80 -120 l 45 -30 l 5 50 Z M 80 -120 l 50 15 l -20 35 Z" fill="#c2334a" />
+			{variant === 'valeria' ? (
+				<circle cx={128} cy={-104} r={14} fill="#e7c24a" />
+			) : (
+				<path d="M 80 -120 l 45 -30 l 5 50 Z M 80 -120 l 50 15 l -20 35 Z" fill="#c2334a" />
+			)}
 			{/* mejillas */}
 			<ellipse cx={-70} cy={45} rx={22} ry={12} fill="#e48a8a" opacity={scared ? 0.25 : 0.55} />
 			<ellipse cx={70} cy={45} rx={22} ry={12} fill="#e48a8a" opacity={scared ? 0.25 : 0.55} />
 			{/* cejas */}
 			{scared ? (
 				<>
-					<path d="M -78 -48 L -28 -60" stroke="#2a1b18" strokeWidth={8} strokeLinecap="round" />
-					<path d="M 78 -48 L 28 -60" stroke="#2a1b18" strokeWidth={8} strokeLinecap="round" />
+					<path d="M -78 -48 L -28 -60" stroke={hair} strokeWidth={8} strokeLinecap="round" />
+					<path d="M 78 -48 L 28 -60" stroke={hair} strokeWidth={8} strokeLinecap="round" />
 				</>
 			) : (
 				<>
-					<path d="M -75 -45 Q -50 -55 -25 -45" stroke="#2a1b18" strokeWidth={7} fill="none" strokeLinecap="round" />
-					<path d="M 75 -45 Q 50 -55 25 -45" stroke="#2a1b18" strokeWidth={7} fill="none" strokeLinecap="round" />
+					<path d="M -75 -45 Q -50 -55 -25 -45" stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
+					<path d="M 75 -45 Q 50 -55 25 -45" stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
 				</>
 			)}
 			{/* ojos */}
 			{sleeping
 				? [-48, 48].map((x) => (
-						<path key={x} d={`M ${x - 24} 8 Q ${x} 26 ${x + 24} 8`} stroke="#2a1b18" strokeWidth={7} fill="none" strokeLinecap="round" />
+						<path key={x} d={`M ${x - 24} 8 Q ${x} 26 ${x + 24} 8`} stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
 					))
 				: [-48, 48].map((x) => (
 				<g key={x}>
