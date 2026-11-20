@@ -63,8 +63,8 @@ export const Kid: React.FC<{
 				</>
 			) : (
 				<>
-					<path d="M -75 -45 Q -50 -55 -25 -45" stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
-					<path d="M 75 -45 Q 50 -55 25 -45" stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
+					<path d={mood === 'neutral' ? 'M -75 -48 L -25 -48' : 'M -75 -45 Q -50 -55 -25 -45'} stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
+					<path d={mood === 'neutral' ? 'M 75 -48 L 25 -48' : 'M 75 -45 Q 50 -55 25 -45'} stroke={hair} strokeWidth={7} fill="none" strokeLinecap="round" />
 				</>
 			)}
 			{/* ojos */}
@@ -90,6 +90,8 @@ export const Kid: React.FC<{
 				<ellipse cx={0} cy={72} rx={12 + mouthOpen * 6} ry={3 + mouthOpen * 16} fill="#5a1e24" />
 			) : scared ? (
 				<ellipse cx={0} cy={74} rx={9} ry={11} fill="#5a1e24" />
+			) : mood === 'neutral' ? (
+				<path d="M -13 74 L 13 74" stroke="#5a1e24" strokeWidth={6} fill="none" strokeLinecap="round" />
 			) : (
 				<path d="M -14 70 Q 0 80 14 70" stroke="#5a1e24" strokeWidth={6} fill="none" strokeLinecap="round" />
 			)}

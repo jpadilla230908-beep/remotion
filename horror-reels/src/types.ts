@@ -8,7 +8,7 @@ export type CameraMove =
 	| 'panCloset'
 	| 'dolly'
 	| 'jumpscare';
-export type Mood = 'normal' | 'scared' | 'hiding' | 'sleeping';
+export type Mood = 'normal' | 'neutral' | 'scared' | 'hiding' | 'sleeping';
 
 export type Scene = {
 	id: string;

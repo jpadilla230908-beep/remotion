@@ -39,7 +39,7 @@
         "x": 760,
         "variant": "valeria",
         "phone": true,
-        "mood": "normal",
+        "mood": "neutral",
         "look": 0,
         "wakeAt": 5.5
       },
@@ -60,9 +60,9 @@
         "x": 760,
         "variant": "valeria",
         "phone": true,
-        "mood": "normal",
+        "mood": "neutral",
         "look": 0,
-        "scaredAt": 1.75
+        "scaredAt": 2.0
       },
       "closet": 0,
       "clock": "3:33",

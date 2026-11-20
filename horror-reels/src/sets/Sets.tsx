@@ -77,7 +77,7 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 	const jumpY = interpolate(sinceWake, [0, 3, 7, 12], [90, -35, 6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	// tranquila al principio; se asusta de golpe en scaredAt (un respingo pequeño)
 	const scaredF = kid?.scaredAt !== undefined ? Math.round(kid.scaredAt * 30) + ctx.lead : null;
-	const mood = kid ? (scaredF !== null ? (ctx.f < scaredF ? 'normal' : 'scared') : kid.mood) : 'normal';
+	const mood = kid ? (scaredF !== null ? (ctx.f < scaredF ? kid.mood : 'scared') : kid.mood) : 'normal';
 	const flinchY = scaredF !== null ? interpolate(ctx.f - scaredF, [0, 2, 6], [0, -22, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
 	// el teléfono suena desde sfxAt hasta que ella contesta (al despertar)
 	const ringF = ctx.scene.sfx === 'ring' ? Math.round((ctx.scene.sfxAt ?? 0) * 30) + ctx.lead : null;
