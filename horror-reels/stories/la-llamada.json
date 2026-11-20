@@ -93,7 +93,12 @@
       },
       "closet": 0,
       "clock": "3:33",
-      "pauseAfter": 0.5
+      "pauseAfter": 0.5,
+      "clip": {
+        "src": "voices/valeria.wav",
+        "start": 2.9,
+        "end": 6.15
+      }
     },
     {
       "id": "s5",

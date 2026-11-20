@@ -59,6 +59,7 @@ Copia `stories/el-armario.json`. Cada escena tiene:
 - `sfx`: `knock` | `creak` | `heartbeat` | `sting` · `clock`, `showTitle`, `pauseAfter`
 - `hitDelay` (susto): segundos de silencio entre el final de la frase y el golpe. Con `"sfx": "scream"` suena el grito de `public/audio/scream.wav`, alineado con el golpe visual, y el ambiente se apaga justo antes
 - `tempo` (p. ej. 0.88): ralentiza la voz de esa escena sin cambiar el tono · `pauses`: `[{"after": "venía", "occurrence": 2, "sec": 0.6}]` mete un silencio real después de esa palabra (Whisper encuentra dónde acaba)
+- `clip`: `{"src": "voices/valeria.wav", "start": 2.9, "end": 6.15}` usa ese fragmento de una toma ya grabada (p. ej. la elegida en un casting) en lugar de sintetizar la frase
 - `intensity` (0..1): dramatismo de la escena con Chatterbox (sube `exaggeration`, baja `cfg`). Con `"beats": true` en la voz, cada `...` del texto se convierte en una pausa real (`beatPause`, 0.45 s por defecto)
 
 El susto (`camera: "jumpscare"`) cae justo al terminar la frase de esa escena.

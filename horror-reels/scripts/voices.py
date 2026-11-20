@@ -244,13 +244,25 @@ def main(story_path: str) -> None:
         wav_path = os.path.join(out_dir, "scenes", f"{scene['id']}.wav")
         # caché: si el texto y la voz no cambiaron, reutiliza la toma anterior
         key = json.dumps([scene["text"], v, scene.get("intensity"), scene.get("beatPause"), FX.get(v.get("fx", "seco"))]
-                         + ([scene.get("tempo"), scene.get("pauses")] if scene.get("tempo") or scene.get("pauses") else []),
+                         + ([scene.get("tempo"), scene.get("pauses")] if scene.get("tempo") or scene.get("pauses") else [])
+                         + ([scene["clip"]] if scene.get("clip") else []),
                          ensure_ascii=False, sort_keys=True)
         key_path = wav_path[:-4] + ".key"
         if os.path.exists(wav_path) and os.path.exists(key_path) and open(key_path, encoding="utf-8").read() == key:
             samples, _ = sf.read(wav_path, dtype="float32")
         else:
-            samples, sr = speak(scene["text"], v, float(scene.get("intensity", 0)), float(scene.get("beatPause", 0.45)))
+            if scene.get("clip"):
+                # usar un fragmento de una toma ya elegida (p. ej. la del casting) en vez de sintetizar
+                c = scene["clip"]
+                full, sr = sf.read(os.path.join(ROOT, c["src"]), dtype="float32")
+                full = full.mean(axis=1) if full.ndim > 1 else full
+                samples = full[int(c["start"] * sr):int(c["end"] * sr)].copy()
+                fade = int(0.03 * sr)
+                samples[:fade] *= np.linspace(0, 1, fade)
+                samples[-fade:] *= np.linspace(1, 0, fade)
+                print(f"      fragmento de {c['src']} ({c['start']}–{c['end']} s)")
+            else:
+                samples, sr = speak(scene["text"], v, float(scene.get("intensity", 0)), float(scene.get("beatPause", 0.45)))
             if scene.get("pauses"):
                 samples = insert_pauses(samples, sr, scene["pauses"])
             samples = apply_fx(samples, v.get("fx", "seco"), sr, float(scene.get("tempo", 1.0)))
