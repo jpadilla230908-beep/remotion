@@ -56,6 +56,7 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 		speechEndF: 0,
 		hitF: 0,
 		mouth: 0,
+		lead: 0,
 	};
 	const ctx: SceneCtx = {
 		scene: {
@@ -74,6 +75,7 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 		speechEndF: 0,
 		hitF: 0,
 		mouth: 0,
+		lead: 0,
 	};
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>

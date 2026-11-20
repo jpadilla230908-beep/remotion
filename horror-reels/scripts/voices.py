@@ -56,6 +56,9 @@ FX = {
     # la risa del teléfono que se vuelve otra cosa
     "risa_telefono": f"highpass=f=400,lowpass=f=3200,asetrate={SR}*0.86,aresample={SR},atempo=1.0,"
     "aecho=0.8:0.6:60|140:0.4|0.25,volume=1.8",
+    # la imitadora con su voz real: grave, rota, con modulación metálica y eco
+    "monstruo": "rubberband=pitch=0.68,tremolo=f=38:d=0.65,flanger=delay=4:depth=6:speed=0.4,"
+    "acrusher=bits=7:mix=0.35,aecho=0.8:0.7:80|170:0.45|0.3,highpass=f=70,lowpass=f=5000,volume=2.2",
     "fantasma_sala": "aecho=0.8:0.6:90|200:0.35|0.2,highpass=f=100,volume=1.3",
 }
 

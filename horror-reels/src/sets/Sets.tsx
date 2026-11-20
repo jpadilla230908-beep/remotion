@@ -71,10 +71,18 @@ const Wardrobe: React.FC<{open: number; ctx: SceneCtx}> = ({open, ctx}) => {
 const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 	const kid = ctx.scene.kid;
 	// despertar de golpe: antes de wakeAt duerme; al despertar se incorpora de un salto
-	const wakeF = kid?.wakeAt !== undefined ? Math.round(kid.wakeAt * 30) : null;
+	const wakeF = kid?.wakeAt !== undefined ? Math.round(kid.wakeAt * 30) + ctx.lead : null;
 	const sleeping = kid?.mood === 'sleeping' || (wakeF !== null && ctx.f < wakeF);
 	const sinceWake = wakeF !== null ? ctx.f - wakeF : 999;
 	const jumpY = interpolate(sinceWake, [0, 3, 7, 12], [90, -35, 6, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	// tranquila al principio; se asusta de golpe en scaredAt (un respingo pequeño)
+	const scaredF = kid?.scaredAt !== undefined ? Math.round(kid.scaredAt * 30) + ctx.lead : null;
+	const mood = kid ? (scaredF !== null ? (ctx.f < scaredF ? 'normal' : 'scared') : kid.mood) : 'normal';
+	const flinchY = scaredF !== null ? interpolate(ctx.f - scaredF, [0, 2, 6], [0, -22, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
+	// el teléfono suena desde sfxAt hasta que ella contesta (al despertar)
+	const ringF = ctx.scene.sfx === 'ring' ? Math.round((ctx.scene.sfxAt ?? 0) * 30) + ctx.lead : null;
+	const ringing = ringF !== null && ctx.f >= ringF && (wakeF === null || ctx.f < wakeF + 8);
+	const monsterOnPhone = ctx.scene.speaker === 'monstruo';
 	const hiding = kid?.mood === 'hiding';
 	const shiver = hiding ? Math.sin(ctx.f * 1.6) * 3 : 0;
 	return (
@@ -87,8 +95,17 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 				<>
 					<rect x={890} y={1110} width={130} height={90} rx={40} fill="#f4f1fa" />
 					<g transform="translate(925, 1135) rotate(80)">
-						<Kid frame={ctx.f} mood="sleeping" look={0} mouth={0} scale={0.6} />
+						<Kid frame={ctx.f} mood="sleeping" look={0} mouth={0} scale={0.6} variant={kid.variant} />
 					</g>
+					{kid.phone && (
+						// el teléfono sobre la cama, junto a la almohada; vibra al sonar
+						<g transform={`translate(${830 + (ringing ? Math.sin(ctx.f * 3.1) * 5 : 0)}, 1195) rotate(-8)`}>
+							{ringing && <circle cx={0} cy={0} r={90} fill="#9fd3ff" opacity={0.12 + 0.08 * Math.sin(ctx.f / 2)} />}
+							<rect x={-40} y={-22} width={80} height={44} rx={8} fill="#15171c" />
+							<rect x={-34} y={-17} width={68} height={34} rx={4} fill={ringing ? '#bfe3ff' : '#1f2933'} filter={ringing ? 'url(#glow)' : undefined} />
+							{ringing && <text x={0} y={5} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={700} fontSize={12} fill="#15171c">MAMÁ</text>}
+						</g>
+					)}
 					{[0, 1, 2].map((i) => {
 						const t = ((ctx.f + i * 25) % 75) / 75;
 						return (
@@ -101,10 +118,10 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 			)}
 			{/* niña sentada */}
 			{kid && !sleeping && (
-				<g transform={`translate(${kid.x}, ${(hiding ? 1105 : 1010) + jumpY})`}>
+				<g transform={`translate(${kid.x}, ${(hiding ? 1105 : 1010) + jumpY + flinchY})`}>
 					<Kid
 						frame={ctx.f}
-						mood={kid.mood}
+						mood={mood}
 						look={kid.look}
 						mouth={ctx.scene.speaker === 'lucia' || ctx.scene.speaker === 'valeria' ? ctx.mouth : 0}
 						scale={0.85}
@@ -112,11 +129,11 @@ const Bed: React.FC<{ctx: SceneCtx}> = ({ctx}) => {
 					/>
 					{kid.phone && (
 						// teléfono pegado a la oreja, con la pantalla iluminada; tiembla mientras suena
-						<g transform={`translate(${118 + (ctx.scene.sfx === 'ring' && ctx.f < 70 ? Math.sin(ctx.f * 3) * 4 : 0)}, 10) rotate(12)`}>
+						<g transform={`translate(${118 + (monsterOnPhone ? Math.sin(ctx.f * 2.7) * 3 : 0)}, 10) rotate(12)`}>
 							<circle cx={-60} cy={10} r={150} fill="#9fd3ff" opacity={0.08} />
 							<rect x={-22} y={-50} width={44} height={84} rx={8} fill="#15171c" />
-							<rect x={-17} y={-43} width={34} height={68} rx={4} fill="#bfe3ff" filter="url(#glow)" />
-							<text x={0} y={-8} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={700} fontSize={10} fill="#15171c">MAMÁ</text>
+							<rect x={-17} y={-43} width={34} height={68} rx={4} fill={monsterOnPhone ? '#ff2a3a' : '#bfe3ff'} filter="url(#glow)" />
+							<text x={0} y={-8} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={700} fontSize={10} fill="#15171c">{monsterOnPhone ? '???' : 'MAMÁ'}</text>
 							<text x={0} y={8} textAnchor="middle" fontFamily="monospace" fontSize={9} fill="#15171c">3:33</text>
 						</g>
 					)}

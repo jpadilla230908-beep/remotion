@@ -17,7 +17,7 @@ export type Scene = {
 	text: string;
 	camera: CameraMove;
 	/** wakeAt: segundos de la escena en que se despierta de golpe (antes, duerme) */
-	kid?: {x: number; mood: Mood; look: number; wakeAt?: number; variant?: 'lucia' | 'valeria'; phone?: boolean};
+	kid?: {x: number; mood: Mood; look: number; wakeAt?: number; variant?: 'lucia' | 'valeria'; phone?: boolean; scaredAt?: number};
 	ghost?: {where: 'closet' | 'underbed'};
 	ranger?: {x: number; mood: 'normal' | 'scared'; look: number; flashlight?: boolean};
 	creature?: {where: 'far' | 'bushes' | 'dark'};
@@ -29,6 +29,8 @@ export type Scene = {
 	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream' | 'scream_creature' | 'snap' | 'static' | 'ring' | 'scream_mimic';
 	/** susto: segundos de silencio entre el final de la frase y el golpe */
 	hitDelay?: number;
+	/** segundos dentro de la escena en que suena el sfx (por defecto, al empezar) */
+	sfxAt?: number;
 	clock?: string;
 	showTitle?: boolean;
 	pauseAfter?: number;
@@ -66,6 +68,8 @@ export type SceneCtx = {
 	speechEndF: number;
 	/** frame (relativo) del golpe del susto */
 	hitF: number;
+	/** frames entre f=0 y el inicio real de la escena en la línea de tiempo (solo la primera escena tiene silencio inicial) */
+	lead: number;
 	/** apertura de boca 0..1 del personaje que habla */
 	mouth: number;
 };

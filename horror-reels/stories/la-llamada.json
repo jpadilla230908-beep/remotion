@@ -22,11 +22,10 @@
       "ref": "voices/mama.wav",
       "fx": "tras_puerta"
     },
-    "risa": {
+    "monstruo": {
       "engine": "qwen",
       "ref": "voices/mama.wav",
-      "fx": "risa_telefono",
-      "qa": false
+      "fx": "monstruo"
     }
   },
   "scenes": [
@@ -41,13 +40,15 @@
         "variant": "valeria",
         "phone": true,
         "mood": "normal",
-        "look": 0
+        "look": 0,
+        "wakeAt": 5.5
       },
       "closet": 0,
       "clock": "3:33",
       "sfx": "ring",
       "showTitle": true,
-      "pauseAfter": 0.3
+      "pauseAfter": 0.3,
+      "sfxAt": 5.2
     },
     {
       "id": "s2",
@@ -59,8 +60,9 @@
         "x": 760,
         "variant": "valeria",
         "phone": true,
-        "mood": "scared",
-        "look": 0
+        "mood": "normal",
+        "look": 0,
+        "scaredAt": 1.75
       },
       "closet": 0,
       "clock": "3:33",
@@ -96,9 +98,9 @@
     {
       "id": "s5",
       "set": "bedroom",
-      "speaker": "risa",
-      "text": "Ja, ja, ja... ja, ja, ja.",
-      "camera": "slowZoomIn",
+      "speaker": "monstruo",
+      "text": "Valeria... ya estoy adentro.",
+      "camera": "closeKid",
       "kid": {
         "x": 760,
         "variant": "valeria",
@@ -115,7 +117,7 @@
       "id": "s6",
       "set": "hallwayScare",
       "speaker": "narrador",
-      "text": "Y la risa ya no venía del teléfono... venía del pasillo.",
+      "text": "Y esa voz ya no venía del teléfono... venía del pasillo.",
       "camera": "jumpscare",
       "sfx": "scream_mimic",
       "hitDelay": 0.5,

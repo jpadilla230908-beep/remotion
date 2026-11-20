@@ -115,7 +115,7 @@ def static(sec=1.2):
     return norm(band * gate * env(len(x), 0.02, 0.3), 0.6)
 
 
-def ring(sec=2.6):
+def ring(sec=2.0):
     """Tono de llamada de móvil: dos pitidos repetidos con vibración."""
     out = np.zeros(int(sec * SR))
     for at in [0.0, 0.35, 1.3, 1.65]:

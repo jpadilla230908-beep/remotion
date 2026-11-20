@@ -47,7 +47,7 @@ export const HorrorReel: React.FC<ReelProps> = ({storyId, story, timeline, capti
 		mouth = Math.min(1, energy * 9);
 	}
 
-	const ctx: SceneCtx = {scene, f, dur, speechEndF, hitF, mouth};
+	const ctx: SceneCtx = {scene, f, dur, speechEndF, hitF, mouth, lead: startF - sceneStartF};
 	const isJump = scene.camera === 'jumpscare';
 	// flash blanco de 1 frame en el golpe y un latido rojo corto; la cara tiene que verse
 	const flash = isJump ? interpolate(f, [hitF - 1, hitF, hitF + 1, hitF + 8], [0, 1, 0.45, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
@@ -106,7 +106,7 @@ export const HorrorReel: React.FC<ReelProps> = ({storyId, story, timeline, capti
 				if (!s.sfx) return null;
 				const st = timeline.scenes.find((x) => x.id === s.id)!;
 				// el golpe del susto cae en el momento del susto (fin de la frase + hitDelay)
-				const at = s.camera === 'jumpscare' ? st.speechEnd + (s.hitDelay ?? 0) - (SFX_HIT[s.sfx] ?? 0) : st.start;
+				const at = s.camera === 'jumpscare' ? st.speechEnd + (s.hitDelay ?? 0) - (SFX_HIT[s.sfx] ?? 0) : st.start + (s.sfxAt ?? 0);
 				return (
 					<Sequence key={s.id} from={Math.max(0, Math.round(at * fps))} layout="none">
 						<Audio src={sfxSrc(s.sfx)} volume={SFX_VOLUME[s.sfx] ?? 0.7} />
