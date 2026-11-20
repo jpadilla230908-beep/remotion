@@ -117,11 +117,19 @@
       "id": "s6",
       "set": "hallwayScare",
       "speaker": "narrador",
-      "text": "Y esa voz ya no venía del teléfono... venía del pasillo.",
+      "text": "Y esa voz ya no venía del teléfono... venía... del pasillo.",
       "camera": "jumpscare",
       "sfx": "scream_mimic",
       "hitDelay": 0.5,
-      "pauseAfter": 2.4
+      "pauseAfter": 2.4,
+      "tempo": 0.88,
+      "pauses": [
+        {
+          "after": "venía",
+          "occurrence": 2,
+          "sec": 0.6
+        }
+      ]
     },
     {
       "id": "s7",
@@ -129,7 +137,15 @@
       "speaker": "narrador",
       "text": "Y tú... ¿contestarías?",
       "camera": "none",
-      "pauseAfter": 1.3
+      "pauseAfter": 1.3,
+      "tempo": 0.88,
+      "pauses": [
+        {
+          "after": "tú",
+          "occurrence": 1,
+          "sec": 0.5
+        }
+      ]
     }
   ]
 }

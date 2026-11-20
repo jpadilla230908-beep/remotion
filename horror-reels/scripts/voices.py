@@ -63,12 +63,13 @@ FX = {
 }
 
 
-def apply_fx(samples: np.ndarray, fx: str, sr: int = SR) -> np.ndarray:
+def apply_fx(samples: np.ndarray, fx: str, sr: int = SR, tempo: float = 1.0) -> np.ndarray:
     with tempfile.TemporaryDirectory() as tmp:
         src, dst = os.path.join(tmp, "in.wav"), os.path.join(tmp, "out.wav")
         sf.write(src, samples, sr)
         # pad final para que el eco no se corte
-        chain = f"aresample={SR}," + FX.get(fx, "anull") + ",apad=pad_dur=0.25"
+        # tempo < 1 alarga la frase sin cambiar el tono
+        chain = f"aresample={SR}," + (f"atempo={tempo}," if tempo != 1.0 else "") + FX.get(fx, "anull") + ",apad=pad_dur=0.25"
         subprocess.run(
             ["ffmpeg", "-loglevel", "error", "-y", "-i", src, "-af", chain, "-ar", str(SR), "-ac", "1", dst],
             check=True,
@@ -197,6 +198,39 @@ def speak(text: str, v: dict, intensity: float, beat_pause: float) -> tuple:
     return np.concatenate(out), sr
 
 
+def insert_pauses(samples: np.ndarray, sr: int, pauses: list) -> np.ndarray:
+    """Mete silencios reales después de palabras concretas.
+    pauses: [{"after": "venía", "occurrence": 2, "sec": 0.6}] — Whisper localiza dónde acaba la palabra."""
+    import torch
+    import whisper
+
+    if "whisper" not in _engines:
+        _engines["whisper"] = whisper.load_model("small", download_root=os.path.join(MODELS, "whisper"))
+    audio16 = whisper.audio.resample(torch.from_numpy(samples), sr, 16000).numpy() if hasattr(whisper.audio, "resample") else None
+    if audio16 is None:
+        import librosa
+
+        audio16 = librosa.resample(samples, orig_sr=sr, target_sr=16000)
+    res = _engines["whisper"].transcribe(audio16.astype(np.float32), language="es", fp16=False, word_timestamps=True)
+    words = [w for seg in res["segments"] for w in seg.get("words", [])]
+    cuts = []
+    for p in pauses:
+        target, n, seen = _norm(p["after"]), int(p.get("occurrence", 1)), 0
+        for w in words:
+            if _norm(w["word"]) == target:
+                seen += 1
+                if seen == n:
+                    cuts.append((w["end"] + 0.04, float(p.get("sec", 0.5))))
+                    break
+        else:
+            print(f"      aviso: no encontré «{p['after']}» ({n}ª vez) para la pausa")
+    for at, sec in sorted(cuts, reverse=True):
+        i = min(len(samples), int(at * sr))
+        samples = np.concatenate([samples[:i], np.zeros(int(sec * sr), dtype=np.float32), samples[i:]])
+        print(f"      pausa de {sec}s en {at:.2f}s")
+    return samples
+
+
 def main(story_path: str) -> None:
     story = json.load(open(story_path, encoding="utf-8"))
     out_dir = os.path.join(ROOT, "public", "reels", story["id"])
@@ -209,14 +243,17 @@ def main(story_path: str) -> None:
         v = story["voices"][scene["speaker"]]
         wav_path = os.path.join(out_dir, "scenes", f"{scene['id']}.wav")
         # caché: si el texto y la voz no cambiaron, reutiliza la toma anterior
-        key = json.dumps([scene["text"], v, scene.get("intensity"), scene.get("beatPause"), FX.get(v.get("fx", "seco"))],
+        key = json.dumps([scene["text"], v, scene.get("intensity"), scene.get("beatPause"), FX.get(v.get("fx", "seco"))]
+                         + ([scene.get("tempo"), scene.get("pauses")] if scene.get("tempo") or scene.get("pauses") else []),
                          ensure_ascii=False, sort_keys=True)
         key_path = wav_path[:-4] + ".key"
         if os.path.exists(wav_path) and os.path.exists(key_path) and open(key_path, encoding="utf-8").read() == key:
             samples, _ = sf.read(wav_path, dtype="float32")
         else:
             samples, sr = speak(scene["text"], v, float(scene.get("intensity", 0)), float(scene.get("beatPause", 0.45)))
-            samples = apply_fx(samples, v.get("fx", "seco"), sr)
+            if scene.get("pauses"):
+                samples = insert_pauses(samples, sr, scene["pauses"])
+            samples = apply_fx(samples, v.get("fx", "seco"), sr, float(scene.get("tempo", 1.0)))
             peak = float(np.max(np.abs(samples))) or 1.0
             samples = samples / peak * 0.9
             sf.write(wav_path, samples, SR)
