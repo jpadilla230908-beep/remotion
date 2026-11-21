@@ -128,9 +128,25 @@ def ring(sec=2.0):
     return norm(out + buzz, 0.7)
 
 
+def water(sec=6.0):
+    """Corriente de río: ruido filtrado con borboteos."""
+    x = t(sec)
+    n = rng.standard_normal(len(x))
+    flow = np.convolve(n, np.ones(40) / 40, "same") * (0.7 + 0.3 * np.sin(2 * np.pi * 0.3 * x))
+    out = flow * 0.8
+    for i in range(int(sec * 6)):
+        at = rng.random() * (sec - 0.1)
+        g = t(0.06)
+        f0 = 300 + rng.random() * 500
+        b = np.sin(2 * np.pi * f0 * g * (1 + g * 8)) * np.exp(-g * 60) * 0.25
+        s = int(at * SR)
+        out[s:s + len(b)] += b
+    return norm(out * env(len(x), 0.8, 1.2), 0.5)
+
+
 if __name__ == "__main__":
     d = os.path.join(ROOT, "public", "sfx")
     os.makedirs(d, exist_ok=True)
-    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat), ("snap", snap), ("static", static), ("ring", ring)]:
+    for name, fn in [("drone", drone), ("knock", knock), ("creak", creak), ("sting", sting), ("heartbeat", heartbeat), ("snap", snap), ("static", static), ("ring", ring), ("water", water)]:
         sf.write(os.path.join(d, f"{name}.wav"), fn(), SR)
         print("sfx:", name)

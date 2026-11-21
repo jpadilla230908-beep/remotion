@@ -2,6 +2,7 @@ import {AbsoluteFill} from 'remotion';
 import './fx/Fx'; // carga las fuentes Creepster y Anton
 import {CreatureEyes} from './characters/Creature';
 import {GlowingGrin} from './characters/Mimic';
+import {River} from './sets/RiverSets';
 import {Forest} from './sets/ForestSets';
 import {Bedroom, Defs} from './sets/Sets';
 import type {SceneCtx} from './types';
@@ -12,7 +13,7 @@ export type CoverProps = {
 	/** subtítulo pequeño bajo el título */
 	tag: string;
 	/** escena de fondo: el dormitorio de «el armario» o el bosque de «algo te observa» */
-	scene?: 'armario' | 'bosque' | 'llamada';
+	scene?: 'armario' | 'bosque' | 'llamada' | 'llorona';
 };
 
 const RED = '#ff2a3a';
@@ -79,7 +80,19 @@ export const Cover: React.FC<CoverProps> = ({lines, tag, scene = 'armario'}) => 
 	};
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
-			{scene === 'bosque' ? (
+			{scene === 'llorona' ? (
+				<AbsoluteFill style={{transform: 'translate(0px, -40px) scale(1.25)', transformOrigin: '60% 62%', filter: 'brightness(1.3)'}}>
+					<svg viewBox="0 0 1080 1920" width={1080} height={1920}>
+						<Defs />
+						<River
+							ctx={{
+								...forest,
+								scene: {id: 'cover', set: 'river', speaker: 'narrador', text: '', camera: 'none', kid: {x: 430, mood: 'scared', look: 1, variant: 'mateo'}, llorona: {where: 'far'}},
+							}}
+						/>
+					</svg>
+				</AbsoluteFill>
+			) : scene === 'bosque' ? (
 				<AbsoluteFill style={{transform: 'translate(40px, -110px) scale(1.15)', transformOrigin: '50% 60%', filter: 'brightness(1.35)'}}>
 					<svg viewBox="0 0 1080 1920" width={1080} height={1920}>
 						<Defs />

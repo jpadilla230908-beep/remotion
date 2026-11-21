@@ -1,13 +1,14 @@
 import {useAudioData, visualizeAudio} from '@remotion/media-utils';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Captions, Overlay, Title, cameraTransform} from './fx/Fx';
+import {River, RiverBank, RiverScare} from './sets/RiverSets';
 import {Cabin, CabinScare, CabinWindow, Forest, ForestPath} from './sets/ForestSets';
 import {Bedroom, Black, Closet, Defs, Hallway, HallwayScare, UnderBed} from './sets/Sets';
 import type {ReelProps, SceneCtx} from './types';
 
-const SFX_VOLUME: Record<string, number> = {knock: 0.9, creak: 0.6, sting: 0.75, heartbeat: 0.5, scream: 1, scream_creature: 1, snap: 0.9, static: 0.5, ring: 0.6, scream_mimic: 1};
+const SFX_VOLUME: Record<string, number> = {knock: 0.9, creak: 0.6, sting: 0.75, heartbeat: 0.5, scream: 1, scream_creature: 1, snap: 0.9, static: 0.5, ring: 0.6, scream_mimic: 1, scream_llorona: 1, water: 0.5};
 // segundos desde el inicio del archivo hasta su golpe (el grito D1 trae un "chupón" de 0.88 s antes)
-const SFX_HIT: Record<string, number> = {sting: 0.05, scream: 0.88, scream_creature: 0.88, scream_mimic: 0.88};
+const SFX_HIT: Record<string, number> = {sting: 0.05, scream: 0.88, scream_creature: 0.88, scream_mimic: 0.88, scream_llorona: 0.88};
 const sfxSrc = (name: string) => staticFile(name.startsWith('scream') ? `audio/${name}.wav` : `sfx/${name}.wav`);
 
 export const HorrorReel: React.FC<ReelProps> = ({storyId, story, timeline, captions}) => {
@@ -55,7 +56,7 @@ export const HorrorReel: React.FC<ReelProps> = ({storyId, story, timeline, capti
 	// estroboscopio y desdoble de color durante el golpe
 	const shock = sinceHit >= 0 && sinceHit < 14;
 	const strobe = shock && (sinceHit === 4 || sinceHit === 9);
-	const SetComp = {bedroom: Bedroom, hallway: Hallway, closet: Closet, underbed: UnderBed, black: Black, forest: Forest, forestPath: ForestPath, cabin: Cabin, cabinWindow: CabinWindow, cabinScare: CabinScare, hallwayScare: HallwayScare}[scene.set];
+	const SetComp = {bedroom: Bedroom, hallway: Hallway, closet: Closet, underbed: UnderBed, black: Black, forest: Forest, forestPath: ForestPath, cabin: Cabin, cabinWindow: CabinWindow, cabinScare: CabinScare, hallwayScare: HallwayScare, river: River, riverBank: RiverBank, riverScare: RiverScare}[scene.set];
 
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
@@ -87,7 +88,7 @@ export const HorrorReel: React.FC<ReelProps> = ({storyId, story, timeline, capti
 				))}
 			<Overlay frame={frame} sceneF={f} cut={isJump || idx === 0} flash={flash} />
 			{scene.showTitle && <Title text={story.title} f={f} dur={dur} />}
-			<Captions words={captions.filter((w) => w.scene === scene.id)} t={t} fps={fps} center={scene.set === 'black'} high={['forest', 'forestPath', 'cabin'].includes(scene.set)} />
+			<Captions words={captions.filter((w) => w.scene === scene.id)} t={t} fps={fps} center={scene.set === 'black'} high={['forest', 'forestPath', 'cabin', 'river', 'riverBank'].includes(scene.set)} />
 
 			{/* AUDIO */}
 			<Audio src={voiceSrc} />

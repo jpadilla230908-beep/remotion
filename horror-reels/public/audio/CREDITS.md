@@ -9,3 +9,5 @@
 - `scream_creature.wav`: grito de la criatura de «Algo te observa» («D2 Chillido inhumano» del casting). Mezcla «Child`s scream 6» de J.Zazvurek y «Male Inhale scream 4» de jorickhoofd (Freesound, vía FSD50K), ambos con licencia **CC BY 3.0**. Si lo usas, cita a los dos autores en la descripción del vídeo.
 
 - `scream_mimic.wav`: grito de «La llamada de las 3:33» («D5 Doble grito» del casting). Mezcla «women_scream_AAA» de thanvannispen y «Child`s scream 4» de J.Zazvurek (Freesound, vía FSD50K), ambos con licencia **CC BY 3.0**: hay que citar a los dos autores en la descripción del vídeo.
+
+- `scream_llorona.wav`: grito de «La Llorona». Mezcla el grito diseñado «D4 Eco del más allá» del casting («Scary scream 3» de Ryding, FSD50K, **CC0**) con un «¡Aaay, mis hijos!» gritado, generado con Qwen3-TTS VoiceDesign. No hay que citar a nadie.

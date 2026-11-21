@@ -1,4 +1,4 @@
-export type SetName = 'bedroom' | 'hallway' | 'closet' | 'underbed' | 'black' | 'forest' | 'forestPath' | 'cabin' | 'cabinWindow' | 'cabinScare' | 'hallwayScare';
+export type SetName = 'bedroom' | 'hallway' | 'closet' | 'underbed' | 'black' | 'forest' | 'forestPath' | 'cabin' | 'cabinWindow' | 'cabinScare' | 'hallwayScare' | 'river' | 'riverBank' | 'riverScare';
 export type CameraMove =
 	| 'none'
 	| 'zoomIn'
@@ -17,16 +17,18 @@ export type Scene = {
 	text: string;
 	camera: CameraMove;
 	/** wakeAt: segundos de la escena en que se despierta de golpe (antes, duerme) */
-	kid?: {x: number; mood: Mood; look: number; wakeAt?: number; variant?: 'lucia' | 'valeria'; phone?: boolean; scaredAt?: number};
+	kid?: {x: number; mood: Mood; look: number; wakeAt?: number; variant?: 'lucia' | 'valeria' | 'mateo'; phone?: boolean; scaredAt?: number};
 	ghost?: {where: 'closet' | 'underbed'};
 	ranger?: {x: number; mood: 'normal' | 'scared'; look: number; flashlight?: boolean};
 	creature?: {where: 'far' | 'bushes' | 'dark'};
 	/** huella de mano que aparece en el cristal (set cabinWindow) */
 	handprint?: boolean;
+	/** la Llorona: al otro lado del río (far) o en la orilla; turn = se da la vuelta */
+	llorona?: {where: 'far' | 'bank'; turn?: boolean};
 	/** sombras de dos pies bajo la puerta del pasillo */
 	feetUnderDoor?: boolean;
 	closet?: number;
-	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream' | 'scream_creature' | 'snap' | 'static' | 'ring' | 'scream_mimic';
+	sfx?: 'knock' | 'creak' | 'sting' | 'heartbeat' | 'scream' | 'scream_creature' | 'snap' | 'static' | 'ring' | 'scream_mimic' | 'scream_llorona' | 'water';
 	/** susto: segundos de silencio entre el final de la frase y el golpe */
 	hitDelay?: number;
 	/** segundos dentro de la escena en que suena el sfx (por defecto, al empezar) */

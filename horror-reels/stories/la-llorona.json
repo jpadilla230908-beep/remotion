@@ -1,0 +1,141 @@
+{
+  "id": "la-llorona",
+  "title": "LA\nLLORONA",
+  "voices": {
+    "narrador": {
+      "engine": "qwen",
+      "ref": "voices/narrador.wav",
+      "fx": "sala"
+    },
+    "mateo": {
+      "engine": "qwen",
+      "ref": "voices/mateo.wav",
+      "fx": "sala"
+    },
+    "llorona": {
+      "engine": "qwen",
+      "ref": "voices/llorona_llanto.wav",
+      "fx": "fantasma_sala"
+    }
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "set": "river",
+      "speaker": "narrador",
+      "text": "Dicen que en las noches sin luna, junto al río... se escucha llorar a una mujer.",
+      "camera": "zoomIn",
+      "showTitle": true,
+      "sfx": "water",
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s2",
+      "set": "river",
+      "speaker": "narrador",
+      "text": "Mateo la escuchó una noche, cuando volvía a casa.",
+      "camera": "slowZoomIn",
+      "kid": {
+        "variant": "mateo",
+        "x": 300,
+        "mood": "normal",
+        "look": 1
+      },
+      "llorona": {
+        "where": "far"
+      },
+      "pauseAfter": 0.3
+    },
+    {
+      "id": "s3",
+      "set": "river",
+      "speaker": "llorona",
+      "text": "Ay... mis hijos... ay, mis hijos...",
+      "camera": "zoomIn",
+      "kid": {
+        "variant": "mateo",
+        "x": 300,
+        "mood": "scared",
+        "look": 1
+      },
+      "llorona": {
+        "where": "far"
+      },
+      "pauseAfter": 0.4,
+      "clip": {
+        "src": "voices/llorona_llanto.wav",
+        "start": 0.0,
+        "end": 6.5
+      }
+    },
+    {
+      "id": "s4",
+      "set": "riverBank",
+      "speaker": "mateo",
+      "text": "¿Señora? ¿Está bien? ¿Necesita ayuda?",
+      "camera": "zoomIn",
+      "kid": {
+        "variant": "mateo",
+        "x": 880,
+        "mood": "scared",
+        "look": -1
+      },
+      "llorona": {
+        "where": "bank"
+      },
+      "pauseAfter": 0.4,
+      "clip": {
+        "src": "voices/mateo.wav",
+        "start": 0.0,
+        "end": 3.2
+      }
+    },
+    {
+      "id": "s5",
+      "set": "riverBank",
+      "speaker": "narrador",
+      "text": "La mujer dejó de llorar. Y muy despacio... se dio la vuelta.",
+      "camera": "zoomIn",
+      "kid": {
+        "variant": "mateo",
+        "x": 880,
+        "mood": "scared",
+        "look": -1
+      },
+      "llorona": {
+        "where": "bank",
+        "turn": true
+      },
+      "sfx": "heartbeat",
+      "tempo": 0.9,
+      "pauseAfter": 0.4
+    },
+    {
+      "id": "s6",
+      "set": "riverScare",
+      "speaker": "narrador",
+      "text": "No tenía cara.",
+      "camera": "jumpscare",
+      "sfx": "scream_llorona",
+      "hitDelay": 0.6,
+      "tempo": 0.9,
+      "pauseAfter": 2.6
+    },
+    {
+      "id": "s7",
+      "set": "black",
+      "speaker": "narrador",
+      "text": "Y tú... ¿la has escuchado en tu país?",
+      "camera": "none",
+      "tempo": 0.88,
+      "pauses": [
+        {
+          "after": "tú",
+          "occurrence": 1,
+          "sec": 0.5
+        }
+      ],
+      "pauseAfter": 1.4
+    }
+  ]
+}

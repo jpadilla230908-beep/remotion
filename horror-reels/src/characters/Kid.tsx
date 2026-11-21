@@ -11,11 +11,12 @@ export const Kid: React.FC<{
 	look: number;
 	mouth: number;
 	scale?: number;
-	/** lucia: pelo negro y lazo rojo · valeria: pelo castaño con coleta, pijama verde azulado */
-	variant?: 'lucia' | 'valeria';
+	/** lucia: pelo negro y lazo rojo · valeria: pelo castaño con coleta, pijama verde azulado · mateo: niño de pelo corto con sudadera */
+	variant?: 'lucia' | 'valeria' | 'mateo';
 }> = ({frame, mood, look, mouth, scale = 1, variant = 'lucia'}) => {
 	const hair = variant === 'valeria' ? '#5a3220' : '#2a1b18';
-	const pj = variant === 'valeria' ? '#2f8f8a' : '#6d5bc4';
+	const pj = variant === 'valeria' ? '#2f8f8a' : variant === 'mateo' ? '#c8642a' : '#6d5bc4';
+	const boy = variant === 'mateo';
 	const scared = mood === 'scared' || mood === 'hiding';
 	const sleeping = mood === 'sleeping';
 	// parpadeo cada ~3 s con algo de azar
@@ -33,21 +34,35 @@ export const Kid: React.FC<{
 		<g transform={`translate(${tremble}, ${breathe}) scale(${scale})`}>
 			{/* cuerpo / pijama */}
 			<path d="M -95 120 Q -120 330 -140 360 L 140 360 Q 120 330 95 120 Z" fill={pj} />
-			<circle cx={-40} cy={210} r={8} fill="#f7e27a" opacity={0.8} />
-			<circle cx={50} cy={260} r={6} fill="#f7e27a" opacity={0.8} />
-			<circle cx={-10} cy={310} r={7} fill="#f7e27a" opacity={0.8} />
+			{boy ? (
+				<path d="M -30 130 L -30 220 M 30 130 L 30 220" stroke="#f2e6d0" strokeWidth={6} strokeLinecap="round" />
+			) : (
+				<>
+					<circle cx={-40} cy={210} r={8} fill="#f7e27a" opacity={0.8} />
+					<circle cx={50} cy={260} r={6} fill="#f7e27a" opacity={0.8} />
+					<circle cx={-10} cy={310} r={7} fill="#f7e27a" opacity={0.8} />
+				</>
+			)}
 			{/* manos */}
 			<circle cx={-100} cy={250 + (scared ? -50 : 0)} r={26} fill="#e8c6b3" />
 			<circle cx={100} cy={250 + (scared ? -50 : 0)} r={26} fill="#e8c6b3" />
 			{/* pelo trasero */}
 			{variant === 'valeria' && <path d="M 120 -110 Q 230 -90 200 60 Q 185 120 150 140 Q 190 40 140 -60 Z" fill={hair} />}
-			<path d="M -150 -10 Q -160 -170 0 -165 Q 160 -170 150 -10 L 155 110 Q 0 140 -155 110 Z" fill={hair} />
+			{boy ? (
+				<path d="M -140 -10 Q -150 -168 0 -163 Q 150 -168 140 -10 Z" fill={hair} />
+			) : (
+				<path d="M -150 -10 Q -160 -170 0 -165 Q 160 -170 150 -10 L 155 110 Q 0 140 -155 110 Z" fill={hair} />
+			)}
 			{/* cara */}
 			<circle cx={0} cy={0} r={128} fill="#ecc9b6" />
 			{/* flequillo */}
-			<path d="M -130 -20 Q -120 -150 0 -140 Q 120 -150 130 -20 Q 90 -80 40 -70 Q 0 -100 -40 -70 Q -90 -80 -130 -20 Z" fill="#2a1b18" />
+			{boy ? (
+				<path d="M -128 -30 Q -110 -145 0 -140 Q 110 -145 128 -30 Q 100 -90 60 -82 Q 40 -102 20 -84 Q 0 -106 -20 -84 Q -40 -102 -60 -82 Q -100 -90 -128 -30 Z" fill={hair} />
+			) : (
+				<path d="M -130 -20 Q -120 -150 0 -140 Q 120 -150 130 -20 Q 90 -80 40 -70 Q 0 -100 -40 -70 Q -90 -80 -130 -20 Z" fill={hair} />
+			)}
 			{/* lazo */}
-			{variant === 'valeria' ? (
+			{boy ? null : variant === 'valeria' ? (
 				<circle cx={128} cy={-104} r={14} fill="#e7c24a" />
 			) : (
 				<path d="M 80 -120 l 45 -30 l 5 50 Z M 80 -120 l 50 15 l -20 35 Z" fill="#c2334a" />

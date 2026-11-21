@@ -12,3 +12,5 @@ cada personaje mantenga la misma voz en todas las frases. El texto de cada toma 
 - `tomas.wav`: Tomás, el guardabosques. Diseñada con Qwen3-TTS VoiceDesign: hombre de unos 45 años, voz media-grave algo áspera, inquieto. La radio de «Algo te observa» usa esta misma voz, distorsionada.
 - `valeria.wav`: Valeria, de 12 años («La llamada de las 3:33»). Opción V7 del casting de voz: diseñada con Qwen3-TTS VoiceDesign pidiendo una niña mexicana nativa de 12 años, de Ciudad de México, con acento mexicano natural y nada de acento extranjero.
 - `mama.wav`: la mamá de Valeria. Diseñada con Qwen3-TTS VoiceDesign. Se usa con tres efectos: por teléfono, detrás de la puerta y la risa.
+- `mateo.wav`: Mateo, de 10 años («La Llorona»). Diseñada con Qwen3-TTS VoiceDesign como niño mexicano nativo.
+- `llorona_llanto.wav`: el llanto de la Llorona («Ay… mis hijos»). Diseñada con Qwen3-TTS VoiceDesign: mujer mexicana llorando.
